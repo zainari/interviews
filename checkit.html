@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+           /* Navbar styles */
+           .navbar {
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0; /* Fixed at the top */
+            left: 0; /* Align to the left */
+            z-index: 1000; /* Ensure it stays above other content */
+        }
+
+        .navbar img {
+            max-width: 72px; /* Adjust as needed */
+            height: auto;
+        }
+
+        .checkout-container {
+            background-color: #fff;
+            padding: 93px;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #555;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .input-group input, 
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .input-group input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .input-group select {
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .order-summary {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .order-summary h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .order-summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .order-summary table td {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-summary table .description {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .order-summary table .price {
+            text-align: right;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .total-row {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .total-row td {
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .savings {
+            color: #28a745;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="img/zain07.png" alt="Logo"> <!-- Replace with your logo image path -->
+    </div>
+<div class="checkout-container">
+    <h2>Checkout</h2>
+
+    <div class="section-title">Contact</div>
+    <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Email me with news and offers">
+    </div>
+
+    <div class="section-title">Delivery</div>
+    <div class="input-group">
+        <label for="country">Country</label>
+        <select id="country">
+            <option value="PK">Pakistan</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" placeholder="First Name">
+    </div>
+    <div class="input-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" placeholder="Last Name">
+    </div>
+    <div class="input-group">
+        <label for="address">Complete Address</label>
+        <input type="text" id="address" placeholder="Complete Address - Type Address in English">
+    </div>
+    <div class="input-group">
+        <label for="house-number">Flat or House Number</label>
+        <input type="text" id="house-number" placeholder="Flat or House Number">
+    </div>
+    <div class="input-group">
+        <label for="city">City</label>
+        <input type="text" id="city" placeholder="City">
+    </div>
+    <div class="input-group">
+        <label for="postal-code">Postal Code (optional)</label>
+        <input type="text" id="postal-code" placeholder="Postal Code (optional)">
+    </div>
+    <div class="input-group">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" placeholder="Phone">
+    </div>
+
+    <div class="checkbox-group">
+        <input type="checkbox" id="save-info">
+        <label for="save-info">Save this information for next time</label>
+    </div>
+
+    <div class="section-title">Shipping Method</div>
+    <div class="input-group">
+        <select>
+            <option value="free">Free Delivery - Free</option>
+        </select>
+    </div>
+
+    <div class="section-title">Payment</div>
+    <p>All transactions are secure and encrypted.</p>
+    <div class="input-group">
+        <select>
+            <option value="cod">Cash on Delivery (COD)</option>
+            <option value="payfast">PAYFAST (Pay via Debit/Credit/Wallet/Bank Account)</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label>Billing Address</label>
+        <div class="checkbox-group">
+            <input type="checkbox" id="same-as-shipping">
+            <label for="same-as-shipping">Same as shipping address</label>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="different-billing">
+            <label for="different-billing">Use a different billing address</label>
+        </div>
+    </div>
+
+    <button class="button">Submit</button>
+
+    <div class="order-summary">
+        <h3>Order Summary</h3>
+        <table>
+            <tr>
+                <td><img src="product-image.png" alt="Product Image" width="50"></td>
+                <td>
+                    <div>Royale Smartwatch</div>
+                    <div class="description">Black metal</div>
+                </td>
+                <td class="price">1 x Rs 13,499.00</td>
+            </tr>
+            <tr>
+                <td colspan="2">Discount</td>
+                <td class="price">-Rs 2,000.00</td>
+            </tr>
+            <tr>
+                <td colspan="2">Subtotal</td>
+                <td class="price">Rs 13,499.00</td>
+            </tr>
+            <tr>
+                <td colspan="2">Shipping</td>
+                <td class="price">Free</td>
+            </tr>
+            <tr class="total-row">
+                <td colspan="2">Total</td>
+                <td class="price">PKR Rs 13,499.00</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="savings">TOTAL SAVINGS: Rs 2,000.00</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

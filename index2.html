@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+    <style>
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Global Styles */
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    padding-top: 70px; /* Adjusts for fixed navbar */
+}
+
+/* Navbar */
+.navtop {
+    position: relative;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar img {
+    height: 50px; /* Adjusted for better visibility */
+    margin-right: 20px;
+}
+
+.navbar .menu {
+    display: flex;
+    gap: 25px;
+    list-style-type: none;
+    margin: 0;
+}
+
+.navbar .menu li {
+    font-size: 16px;
+}
+
+.navbar .menu a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.navbar .menu a:hover {
+    color: #007bff;
+}
+
+.navbar .hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.navbar .hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 5px;
+}
+
+/* Mobile Menu */
+.dropdown-menu {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    list-style-type: none;
+    z-index: 999;
+}
+
+.dropdown-menu a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px 20px;
+    }
+
+    .navbar .menu {
+        display: none;
+    }
+
+    .navbar .hamburger {
+        display: block;
+    }
+
+    .dropdown-menu {
+        display: flex;
+    }
+}
+
+/* Search Bar */
+.search-container {
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.search input {
+    width: 80%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.search button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.search button i {
+    font-size: 16px;
+}
+
+/* Limited Offer and Cart */
+.limitedoffer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px;
+}
+
+.limitedoffer {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.cart-icon {
+    position: relative;
+}
+
+.cart-icon i {
+    font-size: 24px;
+    color: #333;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.navBottom {
+    display: flex;
+}
+
+/* Slider */
+.slider {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+.slide {
+    display: none;
+    width: 100%;
+    height: 400px;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-set-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.image-set {
+    display: flex;
+    gap: 10px;
+}
+
+.image-item img {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+}
+
+button.prev, button.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 30px;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 999;
+}
+
+button.prev {
+    left: 10px;
+}
+
+button.next {
+    right: 10px;
+}
+
+/* Product Gallery */
+.product-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.product-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.product-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.product-item h3 {
+    margin-top: 10px;
+}
+
+.product-item .price {
+    font-weight: bold;
+    margin-top: 10px;
+    color: #007bff;
+}
+
+.product-item .rating {
+    margin-top: 5px;
+    color: #ff9800;
+}
+
+/* About Section */
+.about-section {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+.about-content {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-text h2 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.about-text p {
+    margin: 10px 0;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.about-content img {
+    max-width: 500px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 40px 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.footer-section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.footer-section p, .footer-section ul {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.footer-section ul li {
+    margin: 10px 0;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-section .social a {
+    margin-right: 20px;
+    font-size: 24px;
+    color: white;
+}
+
+.footer-section .social a:hover {
+    color: #007bff;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .navbar .menu {
+        display: none;
+    }
+
+    .navbar .hamburger {
+        display: block;
+    }
+
+    .dropdown-menu {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-gallery {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-content img {
+        max-width: 80%;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .product-item {
+        padding: 10px;
+    }
+
+    .navbar {
+        padding: 10px;
+    }
+
+    .navbar .hamburger div {
+        margin: 3px;
+    }
+
+    .about-content {
+        padding: 10px;
+    }
+}
+
+
+    </style>
+</head>
+
+<body>
+    <nav>
+        <header class="navbar">
+            <a href="#"><img src="img/zain07.png" alt="Logo"></a>
+            <nav>
+                <ul class="menu">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </header>
+        
+        <div class="navItem search-container">
+            <div class="search">
+                <input type="text" placeholder="Search..." class="searchInput">
+                <button type="submit"><i class="fa fa-search" name="search"></i></button>
+            </div>
+        </div>
+        <div class="navItem limitedoffer-container">
+            <span class="limitedoffer">Limited offer!</span>
+            <div class="cart-icon">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <ul class="dropdown-menu" id="mobileMenu">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Smart Watches</a></li>
+            <li><a href="#">Earbuds</a></li>
+            <li><a href="#">10.10 Sale 2024</a></li>
+            <li><a href="#">Support</a></li>
+            <li><a href="#">Track Your Order</a></li>
+            <li><a href="#">Cart</a></li>
+        </ul>
+        
+    </nav>
+
+    <div class="slider">
+        <div class="slide">
+            <img src="img/image20.ssjpg" alt="Slide 1">
+        </div>
+        <div class="slide">
+            <img src="img/pantss.jpg" alt="Slide 2">
+        </div>
+        <div class="slide">
+            <img src="img/watcshes.jpg" alt="Slide 3">
+        </div>
+    </div>
+
+    <button class="prev" onclick="prevSlide()">&#10094;</button>
+    <button class="next" onclick="nextSlide()">&#10095;</button>
+
+    <div class="image-set-container">
+        <div class="image-set">
+            <div class="image-item">
+                <h2>Be Yourself</h2>
+                <img src="img/image15.jpg" alt="Image 1">
+            </div>
+            <div class="image-item">
+                <img src="img/image6jpg.jpg" alt="Image 2">
+                <h2>This is the First Day <br> Of Your New Life</h2>
+            </div>
+        </div>
+        <div class="image-set">
+            <div class="image-item">
+                <h2>Just Do It!</h2>
+                <img src="img/image5.jpg" alt="Image 3">
+            </div>
+        </div>
+    </div>
+
+    <!-- New About Section -->
+    <section class="about-section">
+        <div class="about-content">
+            <img src="img/image16.jpg" alt="About Image">
+            <div class="about-text">
+                <h2>About Us</h2>
+                <p>Welcome to [ZNSolution]! We are dedicated to providing high-quality products that enhance your lifestyle. Established in [2023], our mission is to deliver exceptional service and innovative solutions that exceed expectations.</p>
+                <p>Our journey began with a simple idea: [Briefly describe the initial idea or inspiration]. Since then, we have grown significantly, achieving milestones such as [Highlight major achievements].</p>
+                <p>At [ZNSolution], our values drive us to [Describe core values, e.g., prioritize customer satisfaction, maintain integrity, etc.]. We are committed to [Briefly describe your mission or goal].</p>
+                <p>Meet our dedicated team who works tirelessly to bring you the best [products/services]. For more information or to get in touch, feel free to contact us at [contact information].</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-products">
+        <h2>Featured Products</h2>
+        <div class="product-gallery">
+            <div class="product-item">
+                <img src="img/hoddie.jpeg" alt="Product 1">
+                <h3>Product 1</h3>
+                <p>Rating: ★★★★☆</p>
+                <p>Price: $99.99</p>
+            </div>
+            <div class="product-item">
+                <img src="img/hoddies2.jpeg" alt="Product 2">
+                <h3>Product 2</h3>
+                <p>Rating: ★★★☆☆</p>
+                <p>Price: $79.99</p>
+            </div>
+            <div class="product-item">
+                <img src="img/hoddies3.jpeg" alt="Product 3">
+                <h3>Product 3</h3>
+                <p>Rating: ★★★★★</p>
+                <p>Price: $129.99</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Products Section -->
+    <section class="latest-products">
+        <h2>Latest Products</h2>
+        <div class="product-gallery">
+            <div class="product-item">
+                <img src="img/image22.jpg" alt="Product 1">
+                <h3>Product 1</h3>
+                <p class="rating">★★★★☆</p>
+                <p class="price">$100</p>
+            </div>
+            <div class="product-item">
+                <img src="img/image21.jpg" alt="Product 2">
+                <h3>Product 2</h3>
+                <p class="rating">★★★☆☆</p>
+                <p class="price">$120</p>
+            </div>
+            <div class="product-item">
+                <img src="img/watch.jpg" alt="Product 3">
+                <h3>Product 3</h3>
+                <p class="rating">★★★★★</p>
+                <p class="price">$150</p>
+            </div>
+            <div class="product-item">
+                <a href="productpages/product.html">
+                    <img src="img/watch.jpg" alt="Product 4">
+                    <h3>Product 4</h3>
+                    <p class="rating">★★★☆☆</p>
+                    <p class="price">$130</p>
+                </a>
+            </div>
+            <div class="product-item">
+                <img src="img/watch1.jpg" alt="Product 5">
+                <h3>Product 5</h3>
+                <p class="rating">★★★★☆</p>
+                <p class="price">$110</p>
+            </div>
+            <div class="product-item">
+                <img src="img/pants.jpg" alt="Product 6">
+                <h3>Product 6</h3>
+                <p class="rating">★★★☆☆</p>
+                <p class="price">$140</p>
+            </div>
+            <div class="product-item">
+                <img src="img/image7.jpg" alt="Product 7">
+                <h3>Product 7</h3>
+                <p class="rating">★★★★★</p>
+                <p class="price">$115</p>
+            </div>
+            <div class="product-item">
+                <img src="img/image2-removebg-preview.png" alt="Product 8">
+                <h3>Product 8</h3>
+                <p class="rating">★★★☆☆</p>
+                <p class="price">$105</p>
+            </div>
+            <div class="product-item">
+                <img src="img/image19.jpg" alt="Product 9">
+                <h3>Product 9</h3>
+                <p class="rating">★★★★☆</p>
+                <p class="price">$125</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h2>About Us</h2>
+                <p>We are a leading company in providing high-quality products and exceptional customer service. Our mission is to enrich your life with innovative and reliable solutions.</p>
+            </div>
+            <div class="footer-section links">
+                <h2>Quick Links</h2>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section contact">
+                <h2>Contact Us</h2>
+                <ul>
+                    <li><i class="fa fa-map-marker"></i> 123 Street Name, City, Country</li>
+                    <li><i class="fa fa-phone"></i> +1 234 567 890</li>
+                    <li><i class="fa fa-envelope"></i> info@example.com</li>
+                </ul>
+            </div>
+            <div class="footer-section social">
+                <h2>Follow Us</h2>
+                <ul>
+                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Slider functions
+        let currentSlide = 0;
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('.slide');
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            const slides = document.querySelectorAll('.slide');
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+                slide.style.display = index === currentSlide ? 'block' : 'none';
+            });
+        }
+
+        // Initialize slider
+        document.addEventListener('DOMContentLoaded', () => {
+            updateSlider();
+        });
+    </script>
+
+</body>
+
+</html>

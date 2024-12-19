@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bootstrap (3).css">
+    <link rel="stylesheet" href="styless.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+ /* Ensure the "Limited offer!" and its icon are on the right */
+.limitedoffer-container {
+  margin-left: auto;
+  color: white;
+  font-size: 1.2rem;
+}
+
+/* Style for Limited Offer text */
+.limitedoffer {
+  font-weight: bold;
+  color: yellow; /* You can change this color as needed */
+}
+
+/* Ensure the cart icon is aligned properly */
+.limitedoffer-container .fa-shopping-cart {
+  font-size: 1.5rem;
+  color: white;
+  margin-left: 10px;
+}
+
+/* Add some margin to the search bar to align it with the limited offer */
+.limitedoffer-container form {
+  margin-left: 15px;
+}
+
+/* Logo remains the same on the left */
+.navbar-brand img {
+  max-width: 100px;
+  height: auto;
+}
+
+/* Center remaining navbar items */
+.navbar-nav {
+  margin-left: auto;
+}
+
+    </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+
+        <!-- Logo on the left -->
+        <a class="navbar-brand" href="#">
+            <img src="img/zain07.png" alt="Logo" width="34" height="20">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarColor02">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+            </ul>
+
+            <!-- Limited Offer and Search Bar on the right -->
+            <div class="d-flex align-items-center limitedoffer-container">
+                <span class="limitedoffer">Limited offer!</span>
+                <i class="fa fa-shopping-cart ms-2"></i>
+                <div class="cart-icon">
+                  <i class="fa fa-shopping-cart"></i>
+                  <span class="cart-count">0</span>
+              </div>
+
+                <!-- Search bar next to Limited Offer -->
+                <form class="d-flex ms-3">
+                    <input class="form-control me-sm-2" type="search" placeholder="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    
+</body>
+</html>

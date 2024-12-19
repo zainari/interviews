@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Navbar</title>
+    
+    <style>
+        /* Resetting Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar Container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.navbar:hover {
+    background-color: #444; /* Darker shade on hover */
+}
+
+/* Logo */
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    transition: color 0.3s;
+}
+
+.logo:hover {
+    color: #f39c12; /* Gold on hover */
+}
+
+/* Menu for Desktop */
+.menu {
+    display: flex;
+    gap: 25px;
+    list-style-type: none;
+}
+
+.menu li {
+    font-size: 16px;
+    position: relative;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.menu a:hover {
+    color: #f39c12; /* Gold on hover */
+    background-color: rgba(255, 255, 255, 0.2); /* Slight background change */
+}
+
+/* Hamburger Icon */
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px;
+    border-radius: 3px;
+}
+
+/* Mobile Dropdown Menu */
+.dropdown-menu {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    list-style-type: none;
+    z-index: 999;
+    border-radius: 5px;
+}
+
+.dropdown-menu a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    color: #f39c12;
+}
+
+/* Media Query for Mobile */
+@media (max-width: 768px) {
+    .menu {
+        display: none;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .dropdown-menu {
+        width: 200px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <!-- Logo -->
+        <div class="logo">MyBrand</div>
+
+        <!-- Navigation Menu -->
+        <ul class="menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <!-- Hamburger Icon for Mobile -->
+        <div class="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <!-- Dropdown Menu for Mobile -->
+        <ul class="dropdown-menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Additional Content -->
+    <div style="margin-top: 100px; padding: 20px;">
+        <h1>Welcome to My Website</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nibh vel vehicula tempus, purus erat tincidunt erat, sit amet convallis nulla felis sed odio.</p>
+    </div>
+</body>
+<script>
+    // Mobile Menu Toggle
+const hamburger = document.querySelector('.hamburger');
+const dropdownMenu = document.querySelector('.dropdown-menu');
+
+hamburger.addEventListener('click', () => {
+    dropdownMenu.style.display = dropdownMenu.style.display === 'flex' ? 'none' : 'flex';
+});
+
+// Optional: Navbar Background Change on Scroll
+window.onscroll = function () {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        navbar.style.backgroundColor = '#222';
+    } else {
+        navbar.style.backgroundColor = '#333';
+    }
+};
+
+</script>
+</html>
