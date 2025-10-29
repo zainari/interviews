@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,3 +39,26 @@ Route::get('/contact', function () {
 Route::get('/product', function () {
     return view('page/product');
 });
+
+Route::get('/dashboard', function () {
+    return view('admin/dashboard');
+});
+
+
+Route::get('/setting', function () {
+    return view('admin/product');
+});
+
+Route::get('/addproduct', function () {
+    return view('admin.products.form');
+});
+
+
+
+// Category Routes
+
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+Route::post('/store-category', [CategoryController::class, 'store'])->name('categories.store');
+Route::get('create-category', [CategoryController::class, 'create'])->name('categories.create');
+Route::post('update-category/{id}', [CategoryController::class, 'update'])->name('categories.update');
+Route::get('delete-category/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
