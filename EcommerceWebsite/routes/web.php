@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
@@ -49,9 +50,9 @@ Route::get('/setting', function () {
     return view('admin/product');
 });
 
-Route::get('/addproduct', function () {
-    return view('admin.products.form');
-});
+// Route::get('/addproduct', function () {
+//     return view('admin.products.form');
+// });
 
 
 
@@ -62,3 +63,12 @@ Route::post('/store-category', [CategoryController::class, 'store'])->name('cate
 Route::get('create-category', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('update-category/{id}', [CategoryController::class, 'update'])->name('categories.update');
 Route::get('delete-category/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+// Product Routes
+
+Route::get('products',[ProductController::class,'index'])->name('products.index');
+Route::get('create-product',[ProductController::class,'create'])->name('products.create');
+Route::post('store-product',[ProductController::class,'store'])->name('products.store');
+Route::get('edit-product/{product}',[ProductController::class,'edit'])->name('products.edit');
+Route::post('update-product/{product}',[ProductController::class,'update'])->name('products.update');
+Route::get('delete-product/{product}',[ProductController::class,'destroy'])->name('products.destroy');

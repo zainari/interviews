@@ -7,7 +7,6 @@
 
   {{-- CSS --}}
   <link rel="stylesheet" href="{{ asset('asset/css/admin.css') }}">
-  <link rel="stylesheet" href="{{ asset('asset/css/product.css') }}">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 </head>
