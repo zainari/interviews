@@ -1,7 +1,7 @@
 @extends('layout_admin.app')
 
 @section('title', 'Add Product | Admin Panel')
-@section('page_title', 'Add New Product')
+@section('page_title', '')
 
 @section('content')
 <div class="product-create-wrapper">
@@ -88,7 +88,7 @@
 
             <div class="form-group">
                 <label for="available_to">Available To</label>
-                <input type="datetime-local" name="available_to" id="available_to" value="{{ old('available_to') }}">
+                <input type="datetime-local" name="available_to" id="available_to" value="{{ old('available_to') }}"> 
                 @error('available_to') <small style="color:red;">{{ $message }}</small> @enderror
             </div>
         </div>
@@ -98,7 +98,19 @@
             <textarea name="description" id="description" rows="4" placeholder="Enter product description...">{{ old('description') }}</textarea>
             @error('description') <small style="color:red;">{{ $message }}</small> @enderror
         </div>
-
+        @foreach($attributes as $attribute)
+        <div class="form-group">
+          <label>{{ $attribute->name }}</label>
+          <select name="attributes[{{ $attribute->id }}][]" class="form-control">
+              <option value="">Select {{ $attribute->name }}</option>
+              @foreach($attribute->values as $value)
+                  <option value="{{ $value->id }}">{{ $value->value }}</option>
+              @endforeach
+          </select>
+        </div>
+      @endforeach
+      
+      
         <div class="form-group">
             <label for="image_url">Product Image</label>
             <input type="file" name="image_url" id="image_url" accept="image/*">

@@ -8,11 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-
+    // public $attributes;
     protected $fillable = [
-        'name', 'description', 'price', 'stock', 'image_url',
-        'category_id', 'is_active', 'available_from', 'available_to',
-        'sku', 'brand'
+        'name',
+        'description',
+        'price',
+        'stock',
+        'image_url',
+        'category_id',
+        'is_active',
+        'available_from',
+        'available_to',
+        'sku',
+        'brand'
     ];
 
     protected $casts = [
@@ -25,5 +33,11 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
-}
 
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'product_attributes')
+            ->withPivot('value')
+            ->withTimestamps();
+    }
+}
