@@ -88,8 +88,10 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $attributes = Attribute::with('values')->get();
-
-        $selectedAttributes = $product->attributes->pluck('value', 'attribute_id')->toArray();
+        // dd($attributes);
+        $selectedAttributes = $product->attributes
+        ->groupBy('pivot.attribute_id')
+        ->map(fn($group) => $group->pluck('pivot.value')->toArray());
 
         return view('admin.products.edit', compact('product', 'categories', 'attributes', 'selectedAttributes'));
     }
@@ -116,24 +118,25 @@ class ProductController extends Controller
             }
             $validated['image_url'] = $request->file('image_url')->store('products', 'public');
         } else {
-            // Keep existing image if not uploading a new one
             $validated['image_url'] = $product->image_url;
         }
     
-        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
+        $request->merge([
+            'is_active' => $request->input('is_active', 0),
+        ]);
+        
     
         $product->update($validated);
     
-        ProductAttribute::where('product_id', $product->id)->delete();
-    
         if ($request->filled('attributes')) {
-     
+            // Remove old attributes first
+            ProductAttribute::where('product_id', $product->id)->delete();
+        
             $allValueIds = collect($request->input('attributes'))->flatten()->filter()->unique();
-    
             $values = \App\Models\AttributeValue::whereIn('id', $allValueIds)->get()->keyBy('id');
-    
-            collect($request->input('attributes'))->each(function ($valueIds, $attributeId) use ($product, $values) {
-                collect((array) $valueIds)->each(function ($valueId) use ($product, $attributeId, $values) {
+        
+            foreach ($request->input('attributes') as $attributeId => $valueIds) {
+                foreach ((array) $valueIds as $valueId) {
                     if ($values->has($valueId)) {
                         ProductAttribute::create([
                             'product_id'   => $product->id,
@@ -141,9 +144,10 @@ class ProductController extends Controller
                             'value'        => $values[$valueId]->value,
                         ]);
                     }
-                });
-            });
+                }
+            }
         }
+        
     
         return redirect()->route('products.index')->with('success', 'Product updated successfully with attributes!');
     
@@ -160,6 +164,6 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', '🗑️ Product deleted successfully!');
+        return redirect()->route('products.index')->with('success', ' Product deleted successfully!');
     }
 }

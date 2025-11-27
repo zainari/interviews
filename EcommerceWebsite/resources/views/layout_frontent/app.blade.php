@@ -26,5 +26,6 @@
 
     {{-- Optional JS --}}
     <script src="{{ asset('asset/js/slider.js') }}"></script>
+    
 </body>
 </html>

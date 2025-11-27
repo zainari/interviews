@@ -3,12 +3,7 @@
 @section('title', 'Home | Zain Store')
 
 @section('content')
-    {{-- <section class="hero">
-        <h1>Welcome to Zain Store</h1>
-        <p>Quality products, great prices, and unbeatable service.</p>
-    </section> --}}
-   
-    
+
     <!-- Slider -->
     
     <div class="slider">

@@ -4,6 +4,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\AttributeValueController;
+use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -91,3 +93,21 @@ Route::post('attribute-value-store',[AttributeValueController::class,'store'])->
 Route::get('attribute-value-edit/{attributeValue}', [AttributeValueController::class, 'edit'])->name('attribute-value-edit');
 Route::put('attribute-value-update/{attributeValue}', [AttributeValueController::class, 'update'])->name('attribute-value-update');
 Route::delete('attribute-value-delete/{attributeValue}', [AttributeValueController::class, 'destroy'])->name('attribute-value-destroy');
+
+
+// Chatbot Routes
+
+// Route::get('/chatbot', function () {
+//     return view('chatbot');
+// });
+Route::get('/chatbot', [ChatbotController::class, 'index']);
+Route::post('/chatbot/send', [ChatbotController::class, 'send'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+Route::post('/chatbot/train', [ChatbotController::class, 'train'])->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+// Route::post('/chatbot/send', [ChatbotController::class, 'send']);
+
+// User Login Register Page
+Route::get('/login', [UserController::class, 'index'])->name('user.loginpage');
+Route::post('/register', [UserController::class, 'register'])->name('user.register');
+Route::get('/showregister', [UserController::class, 'showRegisterForm'])->name('user.showregisterform');
+Route::post('/login', [UserController::class, 'login'])->name('user.login');
+Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');

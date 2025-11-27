@@ -6,28 +6,24 @@
 @section('content')
     <div class="category-container">
 
-        {{-- Flash Messages --}}
         @if (session('success'))
             <div class="alert success" id="flashMessage">
                 <strong> Success:</strong> {{ session('success') }}
             </div>
         @elseif(session('error'))
             <div class="alert error" id="flashMessage">
-                <strong>⚠️ Error:</strong> {{ session('error') }}
+                <strong>Error:</strong> {{ session('error') }}
             </div>
         @endif
 
-        {{--  Header --}}
         <div class="category-header" style="display:flex; justify-content:space-between; align-items:center;">
             <h2>Products</h2>
 
             <div class="action-buttons" style="display:flex; gap:10px;">
-                {{-- Attribute Buttons --}}
-                <a href="{{ route('attributes.index') }}" class="btn add-btn" style="background:#5a67d8;">🧩 Attributes</a>
-                <a href="{{ route('attributes-value.index') }}" class="btn add-btn" style="background:#38b2ac;">🎨 Attribute
+                <a href="{{ route('attributes.index') }}" class="btn add-btn" style="background:#5a67d8;">Attributes</a>
+                <a href="{{ route('attributes-value.index') }}" class="btn add-btn" style="background:#38b2ac;"> Attribute
                     Values</a>
 
-                {{--  Add Product Button --}}
                 <a href="{{ route('products.create') }}" class="btn add-btn" style="background:#48bb78;">+ Add Product</a>
             </div>
         </div>
@@ -47,7 +43,6 @@
             </div>
         </div>
 
-        {{--  Products Table --}}
         <div class="category-table-wrapper">
             <div class="category-table">
                 <table>
@@ -84,7 +79,6 @@
                                 <td>{{ $product->brand ?? '—' }}</td>
                                 <td>{{ $product->category->name ?? '—' }}</td>
 
-                                {{--  Show Attributes --}}
                                 <td>
                                     @if ($product->attributes->count())
                                         @foreach ($product->attributes as $attr)

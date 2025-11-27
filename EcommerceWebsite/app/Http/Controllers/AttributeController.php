@@ -30,7 +30,7 @@ class AttributeController extends Controller
         ]);
 
         return redirect()->route('attributes.index')
-            ->with('success', '✅ Attribute created successfully.');
+            ->with('success', ' Attribute created successfully.');
     }
 
     public function edit(Attribute $attribute)

@@ -4,25 +4,13 @@
 
 @section('content')
 
-<!-- 🖼 Product Hero Banner -->
-{{-- <section class="product-detail-hero" style="background-image: url('{{ asset('img/product-banner.jpg') }}');">
-  <div class="overlay"></div>
-  <div class="hero-content">
-    <h1>Elite Smartwatch</h1>
-    <p>Discover the perfect blend of fashion and technology.</p>
-  </div>
-</section> --}}
-
-<!-- 🛍 Product Detail Section -->
 <section class="product-detail-section">
   <div class="detail-container">
     
-    <!-- 📸 Left Image Section -->
     <div class="detail-image">
       <img src="{{ asset('img/watches.jpg') }}" alt="Elite Smartwatch">
     </div>
 
-    <!-- 📝 Right Info Section -->
     <div class="detail-info">
       <h2>Elite Smartwatch</h2>
       <p class="price">$149.00</p>
