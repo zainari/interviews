@@ -89,7 +89,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $attributes = Attribute::with('values')->get();
         // dd($attributes);
-        $selectedAttributes = $product->attributes
+        $selectedAttributes = collect($product->attributes)
         ->groupBy('pivot.attribute_id')
         ->map(fn($group) => $group->pluck('pivot.value')->toArray());
 

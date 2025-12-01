@@ -17,20 +17,20 @@ class UserController extends Controller
     }
     
     public function register(UserRequest $request){
-        // dd('here');
+        
         $userData = $request->validated();
         
         User::create([
-          'name'=>$userData['name'],
-          'email'=>$userData['email'],
-          'password'=>$userData['password'],
+            'name'=>$userData['name'],
+            'email'=>$userData['email'],
+            'password'=>$userData['password'],
         ]);
        
         return redirect()->back()->with('success','Registration Successful. Please Login.');
     }
 
     public function login(Request $request){
-    //    dd('here');
+    
         $credentials = $request->only('email', 'password');
         // if (Auth::attempt($credentials)) {
         if (Auth::attempt($credentials)) {
@@ -38,7 +38,7 @@ class UserController extends Controller
         }
 
         return redirect()->back()->withErrors(['login_error' => 'Invalid email or password.']);
-    // }
+    
 }
 
     public function logout(){

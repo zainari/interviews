@@ -5,7 +5,7 @@
   </div>
 
   <div class="right d-flex align-items-center position-relative">
-    <span class="admin-name me-2">{{ Auth::user()->name ?? 'Admin' }}</span>
+    <span class="admin-name me-2">{{ Auth::user()->name ?? '' }}</span>
 
     <!-- Profile Image Dropdown -->
     <div class="dropdown">
@@ -28,7 +28,7 @@
       </ul>
     </div>
 
-    <form id="logout-form" action="{{ route('user.logout') }}" method="POST" class="d-none">
+    <form id="logout-form" action="{{ route('user.logout') }}" method="Get" class="d-none">
       @csrf
     </form>
   </div>
