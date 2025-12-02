@@ -5,6 +5,24 @@
 @section('content')
 
     <!-- Slider -->
+    <style>
+      .add-btn {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    padding: 10px 15px;
+    text-align: center;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 16px;
+}
+
+.add-btn:hover {
+    background: #625e5e;
+}
+    </style>
     
     <div class="slider">
         <div class="slide"><img src="img/watches.jpg" alt="Slide 1" /></div>
@@ -15,6 +33,7 @@
       </div>
       <div class="image-set-container">
         <div class="image-set">
+         
             <div class="image-item">
                 <h2>Be Yourself</h2>
                 <img src="img/image15.jpg" alt="Image 1">
@@ -32,15 +51,33 @@
         </div>
     </div>
     <section class="featured-products">
-        <h2>Featured Products</h2>
-        <div class="product-gallery">
-          <div class="product-item">
-            <img src="img/hoddie.jpeg" alt="Product" />
-            <h3>Classic Hoodie</h3>
-            <p class="rating">★★★★☆</p>
-            <p class="price">$99</p>
-          </div>
-          <div class="product-item">
+      <h2>Featured Products</h2>
+      <div class="product-gallery">
+        @foreach ($product as $products )
+        <div class="product-item">
+          <a href="{{ route('product.show', $products->id) }}" class="btn">
+              @if ($products->image_url)
+                  <img src="{{ asset('storage/' . $products->image_url) }}" 
+                       alt="{{ $products->name }}" width="80" style="border-radius:8px;">
+              @else
+                  <span>No Image</span>
+              @endif
+          
+              <h3>{{ $products->name }}</h3>
+              <p class="rating">★★★★☆</p>
+              <span class="price">Rs{{ number_format($products->price) }}</span>
+            </a>
+      
+          <button onclick="window.location.href='{{ route('product.show', $products->id) }}'" 
+            class="btn primary add-btn">
+        Add to Cart
+    </button>
+    
+      </div>
+      
+        @endforeach
+        
+          {{-- <div class="product-item">
             <img src="img/hoddies3.jpeg" alt="Product" />
             <h3>Streetwear Hoodie</h3>
             <p class="rating">★★★★★</p>
@@ -51,7 +88,7 @@
             <h3>Urban Fit</h3>
             <p class="rating">★★★☆☆</p>
             <p class="price">$79</p>
-          </div>
+          </div> --}}
         </div>
       </section>
 

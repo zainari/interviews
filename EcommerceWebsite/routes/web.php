@@ -4,22 +4,18 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\AttributeValueController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('page/home');
-});
 
 Route::get('/product', function () {
     return view('layout_frontent/product');
 });
 
-Route::get('/cart', function () {
-    return view('layout_frontent/checkoutform');
-});
 
 Route::get('/chatbot', function () {
     return view('layout_frontent/chatbot');
@@ -29,9 +25,6 @@ Route::get('/about', function () {
     return view('layout_frontent/about');
 });
 
-Route::get('/home', function () {
-    return view('page/home');
-});
 
 Route::get('/aboutpage', function () {
     return view('page/about');
@@ -44,6 +37,17 @@ Route::get('/contact', function () {
 Route::get('/product', function () {
     return view('page/product');
 });
+// HomeController
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+//
+
+Route::post('/cart/add/{id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/remove/{id}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
+Route::get('/product/{id}', [HomeController::class, 'show'])->name('product.show');
+Route::get('/cart/data', [CartController::class, 'getCartData']);
 
 
 Route::middleware([CheckLogin::class])->group(function () {

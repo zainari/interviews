@@ -10,10 +10,14 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
+    public function register()
     {
-        //
+        $this->app->bind(
+            \App\Repositories\studyRepositry::class,
+            \App\Interface\studyinterface::class
+        );
     }
+    
 
     /**
      * Bootstrap any application services.
