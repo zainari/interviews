@@ -36,7 +36,7 @@
             Total: Rs. <span id="cartTotal">0</span>
         </h5>
 
-        <a href="{{ route('cart.index') }}" class="btn btn-dark w-100 mt-3">
+        <a href="{{ route('checkout.form') }}" class="btn btn-dark w-100 mt-3">
             Go to Checkout
         </a>
     </div>

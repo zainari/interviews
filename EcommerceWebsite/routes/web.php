@@ -12,7 +12,7 @@ use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/product', function () {
+Route::get('/productsadasd', function () {
     return view('layout_frontent/product');
 });
 
@@ -20,6 +20,17 @@ Route::get('/product', function () {
 Route::get('/chatbot', function () {
     return view('layout_frontent/chatbot');
 });
+
+// Route::get('checkoutform', [CartController::class, 'checkoutform'])->name('checkout.form');
+Route::get('/checkout', [CartController::class, 'checkoutform'])->name('checkout.form');
+Route::post('/checkout/place-order', [CartController::class, 'placeOrder'])->name('checkout.placeOrder');
+Route::get('/checkout/success/{order}', [CartController::class, 'success'])->name('checkout.success');
+
+// Route::get('/checkout/success', function(){
+//     return view('page.checkout_success');
+// })->name('checkout.success');
+
+
 
 Route::get('/about', function () {
     return view('layout_frontent/about');

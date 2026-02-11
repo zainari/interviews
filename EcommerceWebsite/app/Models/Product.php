@@ -40,4 +40,8 @@ class Product extends Model
             ->withPivot('value')
             ->withTimestamps();
     }
+       // Product belongs to many Orders (pivot table)
+       public function orders() {
+        return $this->belongsToMany(Order::class)->withPivot('quantity', 'price')->withTimestamps();
+    }
 }
