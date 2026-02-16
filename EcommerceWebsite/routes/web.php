@@ -6,7 +6,9 @@ use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\AttributeValueController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
@@ -21,21 +23,13 @@ Route::get('/chatbot', function () {
     return view('layout_frontent/chatbot');
 });
 
-// Route::get('checkoutform', [CartController::class, 'checkoutform'])->name('checkout.form');
 Route::get('/checkout', [CartController::class, 'checkoutform'])->name('checkout.form');
 Route::post('/checkout/place-order', [CartController::class, 'placeOrder'])->name('checkout.placeOrder');
 Route::get('/checkout/success/{order}', [CartController::class, 'success'])->name('checkout.success');
 
-// Route::get('/checkout/success', function(){
-//     return view('page.checkout_success');
-// })->name('checkout.success');
-
-
-
 Route::get('/about', function () {
     return view('layout_frontent/about');
 });
-
 
 Route::get('/aboutpage', function () {
     return view('page/about');
@@ -48,9 +42,9 @@ Route::get('/contact', function () {
 Route::get('/product', function () {
     return view('page/product');
 });
-// HomeController
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 //
 
@@ -100,6 +94,7 @@ Route::middleware([CheckLogin::class])->group(function () {
     Route::get('attribute-value-edit/{attributeValue}', [AttributeValueController::class, 'edit'])->name('attribute-value-edit');
     Route::put('attribute-value-update/{attributeValue}', [AttributeValueController::class, 'update'])->name('attribute-value-update');
     Route::delete('attribute-value-delete/{attributeValue}', [AttributeValueController::class, 'destroy'])->name('attribute-value-destroy');
+    Route::get('orders',[OrderController::class,'index'])->name('orders.index');
 });
 
 
@@ -115,3 +110,10 @@ Route::post('/register', [UserController::class, 'register'])->name('user.regist
 Route::get('/showregister', [UserController::class, 'showRegisterForm'])->name('user.showregisterform');
 Route::post('/login', [UserController::class, 'login'])->name('user.login');
 Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
+
+
+Route::post('/stripe-checkout', [CheckoutController::class, 'placeOrder'])->name('stripe.checkout');
+
+Route::get('/stripe-success', [CheckoutController::class, 'stripeSuccess'])->name('stripe.success');
+
+Route::get('/stripe-cancel', [CheckoutController::class, 'stripeCancel'])->name('stripe.cancel');

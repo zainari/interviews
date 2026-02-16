@@ -261,7 +261,41 @@ body {
 .category-container {
   padding: 30px;
 }
-
+.orders-container{
+  padding: 30px;
+}
+.orders-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.orders-header h2 {
+  margin: 0;
+  color: #1f252c;
+}
+.orders-table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 10px;
+}
+.orders-table table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+.orders-table th,
+.orders-table td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+.orders-table th {
+  background: #f5f7fb;
+  color: #333;
+}
 .category-header {
   display: flex;
   justify-content: space-between;

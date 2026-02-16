@@ -49,7 +49,7 @@
         <h2>Checkout</h2>
 
         <!-- Laravel Form -->
-        <form action="{{ route('checkout.placeOrder') }}" method="POST">
+        <form action="{{ route('stripe.checkout') }}" method="POST">
             @csrf
 
             <div class="section-title">Contact Information</div>

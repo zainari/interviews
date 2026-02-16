@@ -6,7 +6,7 @@
     <li><a href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
     <li><a href="{{route('products.index')}}"><i class="bi bi-bag"></i> Products</a></li>
     <li><a href="{{route('categories.index')}}"><i class="bi bi-bag"> Category</i></a></li>
-    <li><a href="#"><i class="bi bi-cart-check"></i> Orders</a></li>
+    <li><a href="{{route('orders.index')}}"><i class="bi bi-cart-check"></i> Orders</a></li>
     <li><a href="#"><i class="bi bi-people"></i> Users</a></li>
     <li><a href="#"><i class="bi bi-gear"></i> Settings</a></li>
   </ul>
