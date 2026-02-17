@@ -43,6 +43,9 @@
                             {{ __('Clients') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('invoices.index')" :active="request()->routeIs('invoices.*')">
+                            {{ __('Invoices') }}
+                        </x-dropdown-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

@@ -22,7 +22,6 @@ class Client extends Model
         });
     
         static::creating(function ($client) {
-            // Agar manually company_id nahi di gayi, toh login user ki use karo
             if (empty($client->company_id) && Auth::check()) {
                 $client->company_id = Auth::user()->company_id;
             }
