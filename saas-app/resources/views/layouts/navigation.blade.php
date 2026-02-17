@@ -38,6 +38,11 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
+                            <!-- Ye naya link add karein -->
+                        <x-dropdown-link :href="route('clients.index')" :active="request()->routeIs('clients.*')">
+                            {{ __('Clients') }}
+                        </x-dropdown-link>
+
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
