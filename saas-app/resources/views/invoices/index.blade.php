@@ -13,10 +13,14 @@
                     <thead>
                         <tr class="border-b">
                             <th class="p-2">#</th>
-                            <th class="p-2">Client</th>
+                            <th class="p-2"><div class="">                           
+                            </div>Client</th>
                             <th class="p-2">Amount</th>
                             <th class="p-2">Due Date</th>
                             <th class="p-2">Status</th>
+                            <th class="p-2">
+                                Actions                           
+                             </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,6 +34,20 @@
                                 <span class="px-2 py-1 text-sm rounded {{ $invoice->status == 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
                                     {{ ucfirst($invoice->status) }}
                                 </span>
+                            </td>
+
+                            <td class="p-2">
+                                @if($invoice->status === 'pending')
+                                    <form action="{{ route('invoices.mark-as-paid', $invoice) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="text-xs bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded shadow" style="    color: black; background: beige;">
+                                            Mark as Paid
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="text-xs text-gray-400 italic">No actions</span>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

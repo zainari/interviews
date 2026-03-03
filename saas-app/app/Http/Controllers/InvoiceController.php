@@ -16,7 +16,6 @@ class InvoiceController extends Controller
 
     public function create()
     {
-        // Sirf apni company ke clients layein dropdown ke liye
         $clients = Client::all(); 
         return view('invoices.create', compact('clients'));
     }
@@ -33,5 +32,12 @@ class InvoiceController extends Controller
         Invoice::create($request->all());
 
         return redirect()->route('invoices.index')->with('status', 'Invoice created successfully!');
+    }
+
+    public function markAsPaid(Invoice $invoice)
+    {
+        $invoice->update(['status' => 'paid']);
+    
+        return redirect()->back()->with('status', 'Invoice marked as paid!');
     }
 }
