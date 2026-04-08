@@ -66,17 +66,24 @@ class CartController extends Controller
         return response()->json(['cart' => $cart]);
     }
     
-    public function checkoutform() {
+    public function checkoutform(Request $request) {
         $cart = session('cart', []);
         
         // Calculate total and discount
         $total = 0;
         $discount = 0; // agar coupon/discount logic ho
+        if ($request->city == "Karachi") {
+            $shipping = 150;
+        } else {
+            $shipping = 300;
+        }
+        // $shipping = 200;
+        $grandTotal = $total + $shipping;
         foreach($cart as $item) {
             $total += $item['price'] * $item['quantity'];
         }
-    
-        return view('layout_frontent.checkoutform', compact('cart', 'total', 'discount'));
+
+        return view('layout_frontent.checkoutform', compact('cart','total','shipping','grandTotal','discount'));
     }
 
     public function success($orderId)
@@ -110,6 +117,16 @@ class CartController extends Controller
         $subtotal = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
+        
+        // Shipping logic
+        $shipping = 200;
+        
+        // Example: Free shipping above 5000
+        if ($subtotal >= 5000) {
+            $shipping = 0;
+        }
+        
+        $total = $subtotal + $shipping;
     
         // Create order
         $order = Order::create([
@@ -123,8 +140,8 @@ class CartController extends Controller
             'email'          => $request->email,
             'phone'          => $request->phone,
             'subtotal'       => $subtotal,
-            'total'          => $subtotal, 
-            'shipping'       => 0,
+            'shipping'       => $shipping,
+            'total'          => $total,
             'payment_method' => $request->payment_method,
         ]);
 

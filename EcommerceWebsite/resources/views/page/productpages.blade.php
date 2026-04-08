@@ -68,7 +68,7 @@
     <div class="product-image">
         <img src="{{ asset('storage/' . $product->image_url) }}" alt="{{ $product->name }}">
     </div>
-
+{{-- how to create pr  --}}
     <div class="product-info">
         <h2>{{ $product->name }}</h2>
         <p class="price">Rs. {{ number_format($product->price) }}</p>

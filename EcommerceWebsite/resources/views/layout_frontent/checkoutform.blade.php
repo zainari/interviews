@@ -121,8 +121,18 @@
                     <td class="price">- Rs {{ number_format($discount, 2) }}</td>
                 </tr>
                 <tr>
-                    <td colspan="2">Shipping</td>
-                    <td class="price">Free</td>
+                    <td>Subtotal</td>
+                    <td>Rs {{ number_format($total) }}</td>
+                </tr>
+                
+                <tr>
+                    <td>Shipping</td>
+                    <td>{{$shipping}}</td>
+                </tr>
+                
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td><strong>Rs {{ number_format($total + 200) }}</strong></td>
                 </tr>
                 <tr class="total-row">
                     <td colspan="2">Total</td>
