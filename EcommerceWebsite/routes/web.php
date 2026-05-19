@@ -44,6 +44,9 @@ Route::get('/product', function () {
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home-new', [HomeController::class, 'homenew'])->name('home.new');
+Route::get('/shopall', [HomeController::class, 'shopall'])->name('shop.all');
+Route::get('/shopingcart/{id}', [HomeController::class, 'shopingcart'])->name('shoping.cart');
 
 
 //
