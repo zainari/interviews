@@ -85,7 +85,7 @@
         .section-header h2::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 4px; background: var(--primary); border-radius: 10px; }
 
         /* --- Features --- */
-        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-top: -60px; z-index: 10; position: relative; }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; margin-top: 40px; z-index: 10; position: relative; }
         .feature-card { background: white; padding: 25px; border-radius: 20px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 20px; transition: 0.3s; }
         .feature-card:hover { transform: translateY(-5px); }
         .feature-card i { font-size: 35px; color: var(--primary); background: #eff6ff; padding: 15px; border-radius: 15px; }

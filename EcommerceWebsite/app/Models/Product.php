@@ -19,8 +19,11 @@ class Product extends Model
         'is_active',
         'available_from',
         'available_to',
+        'slug',
         'sku',
-        'brand'
+        'brand',
+        'status',
+        'color_group_id'
     ];
 
     protected $casts = [
@@ -43,5 +46,18 @@ class Product extends Model
        // Product belongs to many Orders (pivot table)
        public function orders() {
         return $this->belongsToMany(Order::class)->withPivot('quantity', 'price')->withTimestamps();
+    }
+
+    public function images() {
+        return $this->hasMany(ProductImage::class);
+    }
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    public function sizeStocks()
+    {
+        return $this->hasMany(ProductSizeStock::class);
     }
 }

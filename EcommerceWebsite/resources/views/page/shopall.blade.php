@@ -5,101 +5,125 @@
 @section('content')
 <style>
     /* --- Shop Page Specific Styles --- */
-    .shop-wrapper { padding: 40px 0; background: #fcfcfc; }
+    .shop-wrapper { padding: 40px 0; background: #fcfcfc; margin-top: 20px; }
     
     /* Breadcrumbs */
-    .breadcrumb-area { background: #f1f5f9; padding: 20px 0; margin-bottom: 40px; }
-    .breadcrumb-links { font-size: 14px; color: var(--secondary); font-weight: 500; }
+    .breadcrumb-area { background: #f8fafc; padding: 25px 0; margin-top: 70px; border-bottom: 1px solid #eee; }
+    .breadcrumb-links { font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .breadcrumb-links a { text-decoration: none; color: #94a3b8; transition: 0.3s; }
     .breadcrumb-links a:hover { color: var(--primary); }
+    .breadcrumb-links span { color: #1e293b; }
 
-    /* Layout */
-    .shop-grid-layout { display: grid; grid-template-columns: 280px 1fr; gap: 40px; }
+    /* Layout Grid */
+    .shop-grid-layout { display: grid; grid-template-columns: 280px 1fr; gap: 50px; }
 
     /* Sidebar Filters */
-    .filter-sidebar { position: sticky; top: 100px; height: fit-content; }
-    .filter-widget { background: white; padding: 25px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 30px; box-shadow: var(--shadow-sm); }
-    .filter-title { font-size: 18px; font-weight: 800; margin-bottom: 20px; color: var(--dark); border-bottom: 2px solid var(--light); padding-bottom: 10px; }
+    .filter-sidebar { position: sticky; top: 120px; height: fit-content; }
+    .filter-widget { background: white; padding: 30px; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+    .filter-title { font-size: 14px; font-weight: 800; margin-bottom: 25px; color: #0f172a; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
     
     .filter-list { list-style: none; }
-    .filter-list li { margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 500; color: var(--secondary); cursor: pointer; transition: 0.3s; }
-    .filter-list li:hover { color: var(--primary); }
-    .filter-list input { margin-right: 10px; width: 16px; height: 16px; cursor: pointer; }
+    .filter-list li { margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; transition: 0.3s; }
+    .filter-list li:hover { color: #000; }
+    .filter-list input { margin-right: 12px; width: 18px; height: 18px; cursor: pointer; accent-color: #000; }
 
     /* Price Range */
-    .price-input { width: 100%; margin-top: 15px; cursor: pointer; accent-color: var(--primary); }
+    .price-input { width: 100%; margin-top: 15px; cursor: pointer; accent-color: #000; }
 
     /* Toolbar */
-    .shop-toolbar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 25px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 30px; }
-    .sort-select { padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 14px; font-weight: 600; outline: none; }
+    .shop-toolbar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px 30px; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+    .sort-select { padding: 10px 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; color: #1e293b; }
 
     /* Mobile Filter Button */
-    .mobile-filter-btn { display: none; background: var(--dark); color: white; padding: 12px; border-radius: 10px; text-align: center; margin-bottom: 20px; cursor: pointer; font-weight: 700; }
+    .mobile-filter-btn { display: none; background: #000; color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 25px; cursor: pointer; font-weight: 700; font-size: 12px; letter-spacing: 1px; }
+
+    /* Zilbil Style Product Card Fix */
+    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .p-img-box { height: 380px; background: #f9f9f9; border-radius: 8px; overflow: hidden; position: relative; }
+    .p-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
+    .product-card:hover .p-img-box img { transform: scale(1.05); }
+
+    .add-cart-btn { 
+        width: 100%; margin-top: 20px; padding: 14px; background: #000; color: #fff; 
+        border: none; border-radius: 4px; font-weight: 700; text-transform: uppercase; 
+        font-size: 11px; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
+    }
+    .add-cart-btn:hover { background: #333; }
 
     /* Responsive */
+    @media (max-width: 1200px) {
+        .shop-grid-layout { grid-template-columns: 240px 1fr; gap: 30px; }
+        .product-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     @media (max-width: 991px) {
         .shop-grid-layout { grid-template-columns: 1fr; }
-        .filter-sidebar { display: none; } /* Hide on mobile by default */
-        .filter-sidebar.active { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2001; overflow-y: auto; padding: 50px 20px; }
+        .filter-sidebar { display: none; } 
+        .filter-sidebar.active { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2001; overflow-y: auto; padding: 60px 25px; }
         .mobile-filter-btn { display: block; }
+        .mobile-filter-header { display: flex !important; }
     }
     
     @media (max-width: 600px) {
         .product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 15px !important; }
+        .p-img-box { height: 240px; }
+        .shop-toolbar { flex-direction: column; gap: 15px; text-align: center; }
     }
 </style>
 
-<!-- Breadcrumb -->
+<!-- Breadcrumb Area -->
 <div class="breadcrumb-area">
     <div class="container">
         <div class="breadcrumb-links">
-            <a href="/">Home</a> <i class="fas fa-chevron-right" style="font-size: 10px; margin: 0 10px;"></i> <span>Shop All</span>
+            <a href="{{ route('home.new') }}">Home</a> 
+            <i class="fas fa-chevron-right" style="font-size: 8px; margin: 0 15px; opacity: 0.5;"></i> 
+            <span>Shop All Collection</span>
         </div>
     </div>
 </div>
 
 <div class="shop-wrapper">
     <div class="container">
+        
+        <!-- Mobile Toggle -->
         <div class="mobile-filter-btn" id="openFilters">
-            <i class="fas fa-filter"></i> SHOW FILTERS
+            <i class="fas fa-sliders-h"></i> &nbsp; FILTER & REFINE
         </div>
 
         <div class="shop-grid-layout">
-            <!-- Sidebar -->
+            <!-- Sidebar Filters -->
             <aside class="filter-sidebar" id="shopSidebar">
-                <div class="mobile-filter-header" style="display:none; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                    <h2 style="font-weight: 800;">Filters</h2>
-                    <i class="fas fa-times" id="closeFilters" style="font-size: 24px; cursor: pointer;"></i>
+                <div class="mobile-filter-header" style="display:none; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 20px;">
+                    <h2 style="font-size: 18px; font-weight: 900; letter-spacing: 1px;">FILTERS</h2>
+                    <i class="fas fa-times" id="closeFilters" style="font-size: 20px; cursor: pointer;"></i>
                 </div>
 
                 <div class="filter-widget" data-aos="fade-up">
-                    <h4 class="filter-title">Product Categories</h4>
+                    <h4 class="filter-title">Categories</h4>
                     <ul class="filter-list">
-                        <li><span><input type="checkbox"> Electronics</span> <span>(24)</span></li>
-                        <li><span><input type="checkbox"> Fashion</span> <span>(18)</span></li>
-                        <li><span><input type="checkbox"> Men's Style</span> <span>(12)</span></li>
-                        <li><span><input type="checkbox"> Home Decor</span> <span>(09)</span></li>
-                        <li><span><input type="checkbox"> Accessories</span> <span>(15)</span></li>
+                        <li><span><input type="checkbox"> Men's Polos</span> <span>(12)</span></li>
+                        <li><span><input type="checkbox"> Luxury Watches</span> <span>(08)</span></li>
+                        <li><span><input type="checkbox"> Formal Wear</span> <span>(15)</span></li>
+                        <li><span><input type="checkbox"> Accessories</span> <span>(20)</span></li>
                     </ul>
                 </div>
 
                 <div class="filter-widget" data-aos="fade-up">
                     <h4 class="filter-title">Price Range</h4>
-                    <input type="range" class="price-input" min="0" max="5000">
-                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-weight: 700; font-size: 14px;">
-                        <span>$0</span>
-                        <span>$5000</span>
+                    <input type="range" class="price-input" min="0" max="10000">
+                    <div style="display: flex; justify-content: space-between; margin-top: 15px; font-weight: 800; font-size: 12px; color: #1e293b;">
+                        <span>Rs. 0</span>
+                        <span>Rs. 10,000+</span>
                     </div>
-                    <button class="add-cart-btn" style="margin-top: 20px; background: var(--primary);">FILTER NOW</button>
+                    <button class="add-cart-btn" style="margin-top: 25px; border-radius: 8px;">APPLY FILTER</button>
                 </div>
 
                 <div class="filter-widget" data-aos="fade-up">
-                    <h4 class="filter-title">Select Brand</h4>
+                    <h4 class="filter-title">Featured Brands</h4>
                     <ul class="filter-list">
-                        <li><span><input type="checkbox"> Apple</span></li>
-                        <li><span><input type="checkbox"> Samsung</span></li>
-                        <li><span><input type="checkbox"> Nike</span></li>
-                        <li><span><input type="checkbox"> Rolex</span></li>
-                        <li><span><input type="checkbox"> Gucci</span></li>
+                        <li><span><input type="checkbox"> Elite Select</span></li>
+                        <li><span><input type="checkbox"> Zilbil Boutique</span></li>
+                        <li><span><input type="checkbox"> Urban Luxury</span></li>
                     </ul>
                 </div>
             </aside>
@@ -108,96 +132,103 @@
             <div class="shop-main">
                 <!-- Toolbar -->
                 <div class="shop-toolbar" data-aos="fade-down">
-                    <div style="font-weight: 600; color: var(--secondary);">
-                        Showing <span style="color: var(--dark);">{{ $product->count() }}</span> products
+                    <div style="font-weight: 700; color: #64748b; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">
+                        Showing <span style="color: #000;">{{ $product->count() }}</span> Premium Products
                     </div>
                     <div style="display: flex; align-items: center; gap: 15px;">
-                        <span style="font-size: 14px; font-weight: 700; color: var(--dark);">Sort By:</span>
+                        <span style="font-size: 12px; font-weight: 800; color: #94a3b8; text-transform: uppercase;">Sort:</span>
                         <select class="sort-select">
-                            <option>Default Sorting</option>
+                            <option>Latest Arrivals</option>
                             <option>Price: Low to High</option>
                             <option>Price: High to Low</option>
-                            <option>Newest Arrivals</option>
+                            <option>Top Rated</option>
                         </select>
                     </div>
                 </div>
 
                 <!-- Product Grid -->
-                <div class="product-grid" style="grid-template-columns: repeat(3, 1fr); gap: 25px;">
+                <div class="product-grid">
                     @forelse($product as $item)
-                    <div class="product-card" data-aos="fade-up">
-                        <span class="badge-sale">NEW</span>
-                        <div class="p-actions">
-                            <div class="p-btn"><i class="far fa-heart"></i></div>
-                            <div class="p-btn"><i class="fas fa-eye"></i></div>
-                        </div>
+                    <div class="product-card" data-aos="fade-up" style="background: white; border-radius: 12px; padding: 0; border: none; transition: 0.4s;">
                         <div class="p-img-box">
-                            <img src="{{ Str::startsWith($item->image_url, 'http') ? $item->image_url : asset('storage/' . $item->image_url) }}" alt="{{ $item->name }}">
-                        </div>
-                        <div class="p-info">
-                            <p style="color:var(--secondary); font-size:12px; margin-bottom:5px;">{{ $item->brand ?? 'ELITE SELECT' }}</p>
-                            <h3>{{ $item->name }}</h3>
-                            <div class="p-price-row">
-                                <div class="p-price">${{ number_format($item->price, 2) }}</div>
-                                <div style="font-size:12px; color:var(--accent); font-weight:700;"><i class="fas fa-star"></i> 4.9</div>
+                            <span class="badge-sale" style="position: absolute; top: 15px; left: 15px; background: #000; color: #fff; padding: 4px 12px; font-size: 10px; font-weight: 800; border-radius: 4px; z-index: 5;">NEW</span>
+                            
+                            {{-- Route Model Binding Fix: Using slug with id fallback --}}
+                            <a href="{{ route('product.show', $item->slug ?? $item->id) }}">
+                                <img src="{{ Str::startsWith($item->image_url, 'http') ? $item->image_url : asset('storage/' . $item->image_url) }}" alt="{{ $item->name }}">
+                            </a>
+
+                            <div class="p-actions" style="position: absolute; right: 15px; top: 15px; display: flex; flex-direction: column; gap: 8px;">
+                                <div class="p-btn" style="width: 38px; height: 38px; background: white; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;"><i class="far fa-heart"></i></div>
                             </div>
-                            {{-- Route name 'shoping.cart' use karein aur $item->id pass karein --}}
-                            <button onclick="window.location.href='{{ route('shoping.cart', $item->id) }}'" class="add-cart-btn">
-                                <i class="fas fa-shopping-bag"></i> ADD TO CART
+                        </div>
+
+                        <div class="p-info" style="padding: 20px 5px; text-align: left;">
+                            <p style="color:#94a3b8; font-size:11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">{{ $item->brand ?? 'ELITE SELECT' }}</p>
+                            <a href="{{ route('product.show', $item->slug ?? $item->id) }}" style="text-decoration: none; color: inherit;">
+                                <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #1e293b;">{{ $item->name }}</h3>
+                            </a>
+                            <div class="p-price-row" style="display: flex; align-items: baseline; gap: 10px;">
+                                <div class="p-price" style="font-size: 18px; font-weight: 800; color: #000;">Rs. {{ number_format($item->price) }}</div>
+                                <div style="font-size: 12px; color: #cbd5e1; text-decoration: line-through;">Rs. {{ number_format($item->price * 1.4) }}</div>
+                            </div>
+
+                            {{-- Dynamic Slug-based route for View Details button --}}
+                            <button onclick="window.location.href='{{ route('product.show', $item->slug ?? $item->id) }}'" class="add-cart-btn">
+                                View Details
                             </button>
                         </div>
                     </div>
                     @empty
-                    <div style="grid-column: 1/-1; text-align:center; padding:100px;">
-                        <i class="fas fa-search" style="font-size: 60px; opacity: 0.1; margin-bottom: 20px;"></i>
-                        <h3>No products found matching your criteria.</h3>
+                    <div style="grid-column: 1/-1; text-align:center; padding:100px 20px;">
+                        <i class="fas fa-search" style="font-size: 50px; color: #eee; margin-bottom: 20px;"></i>
+                        <h3 style="color: #94a3b8;">No products found in this collection.</h3>
                     </div>
                     @endforelse
                 </div>
 
                 <!-- Pagination -->
-                <div style="margin-top: 60px; display: flex; justify-content: center; gap: 10px;">
-                    <a href="#" style="width:45px; height:45px; border:1px solid #ddd; display:grid; place-items:center; border-radius:10px; font-weight:700; background:white;">1</a>
-                    <a href="#" style="width:45px; height:45px; border:1px solid #ddd; display:grid; place-items:center; border-radius:10px; font-weight:700; background:white;">2</a>
-                    <a href="#" style="width:45px; height:45px; border:1px solid var(--primary); display:grid; place-items:center; border-radius:10px; font-weight:700; background:var(--primary); color:white;">3</a>
+                <div style="margin-top: 80px; display: flex; justify-content: center; gap: 12px;">
+                    <a href="#" style="width:45px; height:45px; border:1px solid #000; display:grid; place-items:center; border-radius:4px; font-weight:800; background:#000; color:#fff; text-decoration: none;">1</a>
+                    <a href="#" style="width:45px; height:45px; border:1px solid #e2e8f0; display:grid; place-items:center; border-radius:4px; font-weight:800; background:white; color:#1e293b; text-decoration: none;">2</a>
+                    <a href="#" style="width:45px; height:45px; border:1px solid #e2e8f0; display:grid; place-items:center; border-radius:4px; font-weight:800; background:white; color:#1e293b; text-decoration: none;">Next</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Newsletter Section (Same as Home for branding) -->
-<section class="newsletter-section">
+<!-- Newsletter -->
+<section class="newsletter-section" style="padding: 100px 0; background: #fff; border-top: 1px solid #eee;">
     <div class="container">
-        <div class="newsletter-card" data-aos="zoom-in">
-            <h2>Sign Up for 20% Off</h2>
-            <p>Don't miss out on our latest collection and exclusive member-only deals.</p>
-            <div class="newsletter-form">
-                <input type="email" placeholder="Your best email...">
-                <button>JOIN NOW</button>
+        <div class="newsletter-card" data-aos="zoom-in" style="background: #000; color: #fff; padding: 80px 40px; border-radius: 20px; text-align: center;">
+            <h2 style="font-size: 32px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;">Keep In Touch</h2>
+            <p style="margin-bottom: 40px; opacity: 0.7; max-width: 600px; margin-left: auto; margin-right: auto;">Subscribe to receive updates, access to exclusive deals, and more luxury arrivals.</p>
+            <div class="newsletter-form" style="display: flex; gap: 15px; max-width: 500px; margin: auto; flex-wrap: wrap;">
+                <input type="email" placeholder="Your premium email address" style="flex: 1; padding: 18px 25px; border-radius: 4px; border: none; outline: none; min-width: 250px;">
+                <button style="padding: 18px 40px; background: #fff; color: #000; border: none; font-weight: 800; border-radius: 4px; cursor: pointer; text-transform: uppercase;">SUBSCRIBE</button>
             </div>
         </div>
     </div>
 </section>
 
 <script>
-    // Filter Sidebar Mobile Toggle
+    // Sidebar Mobile Toggle
     const openFilters = document.getElementById('openFilters');
     const closeFilters = document.getElementById('closeFilters');
     const shopSidebar = document.getElementById('shopSidebar');
-    const mobileHeader = document.querySelector('.mobile-filter-header');
 
     if(openFilters) {
         openFilters.addEventListener('click', () => {
             shopSidebar.classList.add('active');
-            mobileHeader.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Stop scrolling
         });
     }
 
     if(closeFilters) {
         closeFilters.addEventListener('click', () => {
             shopSidebar.classList.remove('active');
-            mobileHeader.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Enable scrolling
         });
     }
 </script>

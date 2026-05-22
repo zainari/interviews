@@ -46,15 +46,14 @@ Route::get('/product', function () {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home-new', [HomeController::class, 'homenew'])->name('home.new');
 Route::get('/shopall', [HomeController::class, 'shopall'])->name('shop.all');
-Route::get('/shopingcart/{id}', [HomeController::class, 'shopingcart'])->name('shoping.cart');
-
+Route::get('/products/{product}', [ProductController::class, 'shopingcart'])->name('product.show');
 
 //
 
 Route::post('/cart/add/{id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/remove/{id}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
-Route::get('/product/{id}', [HomeController::class, 'show'])->name('product.show');
+Route::get('/product/{id}', [HomeController::class, 'show'])->name('product.showssad');
 Route::get('/cart/data', [CartController::class, 'getCartData']);
 
 
@@ -82,6 +81,7 @@ Route::middleware([CheckLogin::class])->group(function () {
     Route::get('edit-product/{product}',[ProductController::class,'edit'])->name('products.edit');
     Route::post('update-product/{product}',[ProductController::class,'update'])->name('products.update');
     Route::get('delete-product/{product}',[ProductController::class,'destroy'])->name('products.destroy');
+    Route::get('/products/image/{id}/delete', [App\Http\Controllers\ProductController::class, 'deleteImage'])->name('products.image.delete');
 
     // Attribute Routes
     Route::get('attributes', [AttributeController::class, 'index'])->name('attributes.index');
