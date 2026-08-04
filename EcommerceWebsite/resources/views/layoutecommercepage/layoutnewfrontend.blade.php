@@ -230,7 +230,15 @@
                 <div class="nav-actions">
                     <div class="icon-box"><i class="far fa-user"></i></div>
                     <div class="icon-box"><i class="far fa-heart"></i><span>0</span></div>
-                    <div class="icon-box"><i class="fas fa-shopping-basket"></i><span>0</span></div>
+                    
+                    <!-- Cart Icon in Navbar -->
+                <div class="icon-box cart-icon">
+                    <a href="{{ route('cart.index') }}" style="text-decoration: none; color: inherit;">
+                        <i class="fas fa-shopping-basket"></i>
+                        {{-- Laravel Session se count nikal kar yahan dikhao --}}
+                        <span class="count">{{ session('cart') ? count(session('cart')) : 0 }}</span>
+                    </a>
+                </div>
                 </div>
             </div>
         </div>
@@ -348,6 +356,8 @@
                 header.style.boxShadow = 'none';
             }
         });
+
+        
     </script>
 </body>
 </html>

@@ -3,245 +3,238 @@
 @section('title', 'Home | Zain Store - Premium Boutique')
 
 @section('content')
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- FontAwesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- =============================================================
-        1. HERO SLIDER SECTION
-    ============================================================== -->
-    <section class="hero" style="position: relative; overflow: hidden; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 100px 0;">
+<style>
+    /* =============================================================
+       ✅ GLOBAL & RESPONSIVE VARIABLES
+    ============================================================== */
+    :root {
+        --primary: #000;
+        --secondary: #64748b;
+        --light-bg: #f8fafc;
+        --white: #ffffff;
+    }
+
+    /* --- HERO SECTION --- */
+    .hero { min-height: 70vh; display: flex; align-items: center; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); padding: 60px 0; }
+    .hero-flex { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .hero-text { flex: 1; min-width: 300px; }
+    .hero-text h1 { font-size: clamp(2rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; margin: 20px 0; }
+    .hero-img { flex: 1; min-width: 300px; text-align: center; }
+    .hero-img img { width: 100%; max-width: 500px; border-radius: 10px; filter: drop-shadow(10px 10px 30px rgba(0,0,0,0.1)); }
+
+    /* --- FEATURES GRID --- */
+    .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 50px 0; }
+    .feature-card { background: #fff; padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid #eee; transition: 0.3s; }
+    .feature-card i { font-size: 25px; color: #000; }
+    .feature-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .feature-card p { font-size: 12px; color: #777; }
+
+    /* --- CATEGORY CIRCLES --- */
+    .cat-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+    .category-box { text-align: center; text-decoration: none; color: inherit; }
+    .cat-circle { background: #fff; border-radius: 50%; width: 140px; height: 140px; margin: 0 auto 15px; display: grid; place-items: center; border: 1px solid #eee; transition: 0.4s; overflow: hidden; }
+    .cat-circle img { width: 50%; }
+    .category-box:hover .cat-circle { transform: translateY(-5px); border-color: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+    /* --- PRODUCT CARD (Zilbil Style) --- */
+    .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+    .product-card { background: white; border-radius: 8px; overflow: hidden; transition: 0.4s; position: relative; border: 1px solid #f1f5f9; display: flex; flex-direction: column; }
+    .product-card:hover { border-color: #000; transform: translateY(-5px); }
+    
+    .p-img-box { height: 350px; background: #f9f9f9; overflow: hidden; position: relative; }
+    .p-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+    .p-actions { position: absolute; right: 10px; top: 10px; display: flex; flex-direction: column; gap: 8px; z-index: 5; opacity: 0; transition: 0.3s; }
+    .product-card:hover .p-actions { opacity: 1; }
+    .p-btn { width: 35px; height: 35px; background: #fff; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; color: #000; text-decoration: none; }
+
+    .p-info { padding: 15px; text-align: left; flex-grow: 1; }
+    .p-brand { color: #94a3b8; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .p-name { font-size: 14px; font-weight: 600; margin: 8px 0; color: #000; text-decoration: none; height: 40px; overflow: hidden; display: block; }
+    .p-price-row { display: flex; align-items: baseline; gap: 10px; }
+    .curr-price { font-size: 16px; font-weight: 800; }
+    .old-price { font-size: 12px; color: #cbd5e1; text-decoration: line-through; }
+
+    .home-add-btn { width: 100%; margin-top: 15px; padding: 12px; background: #000; color: #fff; border: none; border-radius: 4px; font-weight: 700; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* =============================================================
+       📱 MEDIA QUERIES (FULL RESPONSIVE)
+    ============================================================== */
+
+    /* For Tablets (up to 1024px) */
+    @media (max-width: 1024px) {
+        .product-grid { grid-template-columns: repeat(3, 1fr); }
+        .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* For Small Tablets / Large Phones (up to 768px) */
+    @media (max-width: 768px) {
+        .hero-flex { flex-direction: column; text-align: center; }
+        .hero-text { order: 2; }
+        .hero-img { order: 1; }
+        .cat-container { grid-template-columns: repeat(2, 1fr); }
+        .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .p-img-box { height: 250px; }
+        .hero { padding: 40px 0; }
+    }
+
+    /* For Mobile Devices (320px to 480px) */
+    @media (max-width: 480px) {
+        .container { padding: 0 15px; }
+        .hero-text h1 { font-size: 2.2rem; }
+        .features-grid { grid-template-columns: 1fr; gap: 10px; }
+        .cat-circle { width: 110px; height: 110px; }
+        .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .p-img-box { height: 200px; }
+        .p-info { padding: 10px; }
+        .p-name { font-size: 12px; height: 35px; }
+        .home-add-btn { font-size: 9px; padding: 10px 5px; }
+        .section-header h2 { font-size: 24px; }
+    }
+</style>
+
+    <!-- 1. HERO SECTION -->
+    <section class="hero">
         <div class="container">
-            <div class="hero-flex" style="display: flex; align-items: center; gap: 50px; flex-wrap: wrap;">
-                <div class="hero-text" data-aos="fade-right" style="flex: 1; min-width: 300px;">
-                    <span style="color:var(--primary); font-weight:800; letter-spacing:4px; text-transform:uppercase; font-size:14px; display: block; margin-bottom: 20px;">
-                        Luxury Collection 2025
-                    </span>
-                    <h1 style="font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 25px; color: var(--dark);">
-                        Elegance in Every <br> <span style="color: var(--primary);">Stitch & Detail.</span>
-                    </h1>
-                    <p style="font-size: 18px; color: var(--secondary); margin-bottom: 40px; max-width: 600px; line-height: 1.8;">
-                        Discover our curated selection of high-end fashion and lifestyle essentials. Handcrafted quality meets modern aesthetics.
-                    </p>
-                    <div style="display:flex; gap:20px; flex-wrap:wrap;">
-                        <a href="{{ route('shop.all') }}" class="btn-luxury" style="padding: 20px 50px; background:var(--dark); color:white; font-weight:700; text-decoration:none; border-radius:4px; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
-                            SHOP COLLECTION
-                        </a>
-                        <a href="{{ route('shop.all') }}" class="btn-luxury" style="padding: 20px 50px; background:white; color:var(--dark); font-weight:700; border:1px solid #ddd; text-decoration:none; border-radius:4px; transition: 0.3s;">
-                            VIEW OFFERS
-                        </a>
+            <div class="hero-flex">
+                <div class="hero-text" data-aos="fade-up">
+                    <span style="color:#000; font-weight:800; letter-spacing:3px; text-transform:uppercase; font-size:12px;">Premium Selection 2025</span>
+                    <h1>Luxury Style. <br> <span style="color:#64748b;">Zain Boutique.</span></h1>
+                    <p>Discover the finest handcrafted apparel and accessories. Minimalist design meets maximum comfort.</p>
+                    <div style="display:flex; gap:15px; margin-top:30px; flex-wrap:wrap; justify-content: inherit;">
+                        <a href="{{ route('shop.all') }}" class="btn-luxury" style="padding: 15px 40px; background:#000; color:#fff; text-decoration:none; font-weight:700;">SHOP ALL</a>
+                        <a href="{{ route('shop.all') }}" class="btn-luxury" style="padding: 15px 40px; background:#fff; color:#000; border:1px solid #000; text-decoration:none; font-weight:700;">NEW DROPS</a>
                     </div>
                 </div>
-                <div class="hero-img" data-aos="zoom-in" data-aos-duration="1500" style="flex: 1; min-width: 300px; text-align: right;">
-                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=800&q=80" 
-                         alt="New Arrival Model" 
-                         style="width: 100%; max-width: 550px; border-radius: 20px; box-shadow: 20px 20px 60px rgba(0,0,0,0.15); transform: rotate(-2deg);">
+                <div class="hero-img" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=800&q=80" alt="Model">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- =============================================================
-        2. FEATURES BADGES (Trust Builders)
-    ============================================================== -->
-    <section style="background: white; padding: 60px 0; border-bottom: 1px solid #eee;">
-        <div class="container">
-            <div class="features-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
-                <div class="feature-card" data-aos="fade-up" style="display: flex; align-items: center; gap: 20px; padding: 20px; background: #fafafa; border-radius: 12px;">
-                    <i class="fas fa-truck-fast" style="font-size: 30px; color: var(--primary);"></i>
-                    <div>
-                        <h4 style="font-weight: 700; font-size: 16px; margin-bottom: 5px;">Express Delivery</h4>
-                        <p style="font-size: 13px; color: #777;">Worldwide in 3-5 business days</p>
-                    </div>
+    <!-- 2. FEATURES -->
+    <section class="container">
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up">
+                <i class="fa-solid fa-truck-fast"></i>
+                <div>
+                    <h4>Fast Shipping</h4>
+                    <p>Across Pakistan</p>
                 </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="100" style="display: flex; align-items: center; gap: 20px; padding: 20px; background: #fafafa; border-radius: 12px;">
-                    <i class="fas fa-shield-check" style="font-size: 30px; color: var(--primary);"></i>
-                    <div>
-                        <h4 style="font-weight: 700; font-size: 16px; margin-bottom: 5px;">Secure Checkout</h4>
-                        <p style="font-size: 13px; color: #777;">100% Encrypted SSL Payments</p>
-                    </div>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div>
+                    <h4>Secure Pay</h4>
+                    <p>100% Protected</p>
                 </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="200" style="display: flex; align-items: center; gap: 20px; padding: 20px; background: #fafafa; border-radius: 12px;">
-                    <i class="fas fa-comments-alt-dollar" style="font-size: 30px; color: var(--primary);"></i>
-                    <div>
-                        <h4 style="font-weight: 700; font-size: 16px; margin-bottom: 5px;">Easy Returns</h4>
-                        <p style="font-size: 13px; color: #777;">30 Days hassle-free exchange</p>
-                    </div>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <i class="fa-solid fa-rotate-left"></i>
+                <div>
+                    <h4>Easy Return</h4>
+                    <p>7 Days Exchange</p>
                 </div>
-                <div class="feature-card" data-aos="fade-up" data-aos-delay="300" style="display: flex; align-items: center; gap: 20px; padding: 20px; background: #fafafa; border-radius: 12px;">
-                    <i class="fas fa-headset" style="font-size: 30px; color: var(--primary);"></i>
-                    <div>
-                        <h4 style="font-weight: 700; font-size: 16px; margin-bottom: 5px;">24/7 Support</h4>
-                        <p style="font-size: 13px; color: #777;">Expert help whenever you need it</p>
-                    </div>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <i class="fa-solid fa-headset"></i>
+                <div>
+                    <h4>24/7 Support</h4>
+                    <p>Live Assistance</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- =============================================================
-        3. FEATURED CATEGORIES SECTION
-    ============================================================== -->
-    <section class="section-padding" style="padding: 100px 0;">
+    <!-- 3. TOP CATEGORIES -->
+    <section style="padding: 60px 0; background: #fafafa;">
         <div class="container">
-            <div class="section-header" data-aos="fade-up" style="text-align: center; margin-bottom: 60px;">
-                <p style="color:var(--secondary); font-weight:700; letter-spacing:3px; margin-bottom:15px; text-transform:uppercase;">Browse our Universe</p>
-                <h2 style="font-size: 36px; font-weight: 800;">Top Categories</h2>
+            <div class="section-header" style="text-align: center; margin-bottom: 40px;">
+                <h2 style="font-size: 28px; font-weight: 800; text-transform: uppercase;">Top Categories</h2>
             </div>
-            
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:30px; margin-top:40px;">
-                <a href="{{ route('shop.all') }}" class="category-box" style="text-align:center; text-decoration: none; color: inherit; group;" data-aos="zoom-in">
-                    <div style="background:#f1f5f9; border-radius:50%; width:180px; height:180px; margin:0 auto 20px; display:grid; place-items:center; transition:0.5s; overflow:hidden; border: 1px solid #eee;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050230.png" style="width:50%;" alt="Electronics">
+            <div class="cat-container">
+                @php 
+                    $cats = [
+                        ['name' => 'Fashion', 'icon' => 'https://cdn-icons-png.flaticon.com/512/3050/3050186.png'],
+                        ['name' => 'Watches', 'icon' => 'https://cdn-icons-png.flaticon.com/512/3050/3050230.png'],
+                        ['name' => 'Footwear', 'icon' => 'https://cdn-icons-png.flaticon.com/512/3050/3050192.png'],
+                        ['name' => 'Bags', 'icon' => 'https://cdn-icons-png.flaticon.com/512/3050/3050236.png']
+                    ];
+                @endphp
+                @foreach($cats as $c)
+                <a href="{{ route('shop.all') }}" class="category-box">
+                    <div class="cat-circle">
+                        <img src="{{ $c['icon'] }}" alt="{{ $c['name'] }}">
                     </div>
-                    <h4 style="font-weight:700; text-transform: uppercase; letter-spacing: 1px;">Electronics</h4>
+                    <h4 style="font-size: 13px; font-weight: 700; text-transform: uppercase;">{{ $c['name'] }}</h4>
                 </a>
-                <a href="{{ route('shop.all') }}" class="category-box" style="text-align:center; text-decoration: none; color: inherit;" data-aos="zoom-in" data-aos-delay="100">
-                    <div style="background:#f1f5f9; border-radius:50%; width:180px; height:180px; margin:0 auto 20px; display:grid; place-items:center; transition:0.5s; overflow:hidden; border: 1px solid #eee;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050186.png" style="width:50%;" alt="Fashion">
-                    </div>
-                    <h4 style="font-weight:700; text-transform: uppercase; letter-spacing: 1px;">Fashion</h4>
-                </a>
-                <a href="{{ route('shop.all') }}" class="category-box" style="text-align:center; text-decoration: none; color: inherit;" data-aos="zoom-in" data-aos-delay="200">
-                    <div style="background:#f1f5f9; border-radius:50%; width:180px; height:180px; margin:0 auto 20px; display:grid; place-items:center; transition:0.5s; overflow:hidden; border: 1px solid #eee;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050236.png" style="width:50%;" alt="Cosmetics">
-                    </div>
-                    <h4 style="font-weight:700; text-transform: uppercase; letter-spacing: 1px;">Cosmetics</h4>
-                </a>
-                <a href="{{ route('shop.all') }}" class="category-box" style="text-align:center; text-decoration: none; color: inherit;" data-aos="zoom-in" data-aos-delay="300">
-                    <div style="background:#f1f5f9; border-radius:50%; width:180px; height:180px; margin:0 auto 20px; display:grid; place-items:center; transition:0.5s; overflow:hidden; border: 1px solid #eee;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050192.png" style="width:50%;" alt="Footwear">
-                    </div>
-                    <h4 style="font-weight:700; text-transform: uppercase; letter-spacing: 1px;">Footwear</h4>
-                </a>
+                @endforeach
             </div>
         </div>
     </section>
 
-    <!-- =============================================================
-        4. FLASH SALE WITH TIMER
-    ============================================================== -->
-    <section class="container" style="margin-bottom:100px;">
-        <div style="background: #0f172a; border-radius: 30px; padding: 60px; color: white; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 40px;" data-aos="fade-up">
-            <div style="flex: 1; min-width: 300px;">
-                <h2 style="font-size:40px; font-weight:800; margin-bottom:15px; letter-spacing: -1px;">
-                    <i class="fas fa-bolt" style="color:var(--accent); margin-right: 10px;"></i> FLASH SALE
-                </h2>
-                <p style="font-size: 18px; opacity:0.8; line-height: 1.6;">Get an exclusive 25% discount on all premium watches and electronics for the next 24 hours only.</p>
-            </div>
-            <div style="display:flex; gap:20px; flex-wrap: wrap;">
-                <div style="background:rgba(255,255,255,0.08); padding:20px; border-radius:15px; text-align:center; min-width:100px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="font-size:32px; font-weight: 800;">12</h3><span style="font-size:11px; opacity:0.6; text-transform:uppercase; font-weight: 700;">Hours</span>
-                </div>
-                <div style="background:rgba(255,255,255,0.08); padding:20px; border-radius:15px; text-align:center; min-width:100px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="font-size:32px; font-weight: 800;">45</h3><span style="font-size:11px; opacity:0.6; text-transform:uppercase; font-weight: 700;">Mins</span>
-                </div>
-                <div style="background:rgba(255,255,255,0.08); padding:20px; border-radius:15px; text-align:center; min-width:100px; border: 1px solid rgba(255,255,255,0.1);">
-                    <h3 style="font-size:32px; font-weight: 800;">30</h3><span style="font-size:11px; opacity:0.6; text-transform:uppercase; font-weight: 700;">Secs</span>
-                </div>
-            </div>
-            <div style="text-align: right;">
-                <a href="{{ route('shop.all') }}" class="btn-luxury" style="background:var(--primary); color:white; padding:18px 45px; border-radius:12px; font-weight: 800; text-decoration: none; display: inline-block;">
-                    EXPLORE DEALS
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- =============================================================
-        5. MAIN PRODUCTS GRID (NEW ARRIVALS)
-    ============================================================== -->
-    <section class="section-padding" id="shop" style="padding-bottom: 100px;">
+    <!-- 4. NEW ARRIVALS GRID -->
+    <section style="padding: 80px 0;">
         <div class="container">
-            <div class="section-header" data-aos="fade-up" style="text-align: center; margin-bottom: 60px;">
-                <p style="color:var(--primary); font-weight:800; letter-spacing:4px; margin-bottom:15px; text-transform:uppercase;">Handpicked Selection</p>
-                <h2 style="font-size: 40px; font-weight: 800;">New Arrivals</h2>
+            <div class="section-header" style="text-align: center; margin-bottom: 50px;">
+                <p style="color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 11px;">Our Latest Drops</p>
+                <h2 style="font-size: 32px; font-weight: 800;">New Arrivals</h2>
             </div>
 
-            <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px;">
+            <div class="product-grid">
                 @forelse($product as $item)
-                <div class="product-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}" style="background: white; border-radius: 15px; overflow: hidden; transition: 0.4s; position: relative; border: 1px solid #eee;">
-                    <span class="badge-sale" style="position: absolute; top: 15px; left: 15px; background: #000; color: #fff; padding: 4px 12px; font-size: 10px; font-weight: 800; border-radius: 4px; z-index: 5;">NEW</span>
-                    <div class="p-actions" style="position: absolute; right: 15px; top: 15px; display: flex; flex-direction: column; gap: 8px; z-index: 5;">
-                        <div class="p-btn" style="width: 40px; height: 40px; background: white; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;"><i class="far fa-heart"></i></div>
-                        <a href="{{ route('product.show', $item->slug ?? $item->id) }}" class="p-btn" style="width: 40px; height: 40px; background: white; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: inherit; text-decoration: none;"><i class="fas fa-eye"></i></a>
-                    </div>
-                    <div class="p-img-box" style="height: 350px; background: #f9f9f9; overflow: hidden;">
+                <div class="product-card" data-aos="fade-up">
+                    <div class="p-img-box">
+                        <span style="position: absolute; top: 12px; left: 12px; background: #000; color: #fff; padding: 3px 10px; font-size: 9px; font-weight: 800; border-radius: 3px; z-index: 2;">NEW</span>
+                        <div class="p-actions">
+                            <div class="p-btn"><i class="fa-regular fa-heart"></i></div>
+                            <a href="{{ route('product.show', $item->slug ?? $item->id) }}" class="p-btn"><i class="fa-solid fa-eye"></i></a>
+                        </div>
                         <a href="{{ route('product.show', $item->slug ?? $item->id) }}">
-                            <img src="{{ Str::startsWith($item->image_url, 'http') ? $item->image_url : asset('storage/' . $item->image_url) }}" 
-                                 alt="{{ $item->name }}" 
-                                 style="width: 100%; height: 100%; object-fit: cover; transition: 0.6s;">
+                            <img src="{{ Str::startsWith($item->image_url, 'http') ? $item->image_url : asset('storage/' . $item->image_url) }}" alt="{{ $item->name }}">
                         </a>
                     </div>
-                    <div class="p-info" style="padding: 25px; text-align: left;">
-                        <p style="color:var(--secondary); font-size:11px; margin-bottom:8px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">{{ $item->brand ?? 'ELITE SELECT' }}</p>
-                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; height: 20px; overflow: hidden;">{{ $item->name }}</h3>
-                        <div class="p-price-row" style="display: flex; align-items: center; justify-content: space-between;">
-                            <div class="p-price" style="font-size: 20px; font-weight: 800; color: #000;">
-                                Rs. {{ number_format($item->price) }}
-                                <span style="font-size: 13px; color: #bbb; text-decoration: line-through; font-weight: 400; margin-left: 10px;">Rs. {{ number_format($item->price * 1.3) }}</span>
-                            </div>
+                    <div class="p-info">
+                        <span class="p-brand">{{ $item->brand ?? 'ELITE SELECT' }}</span>
+                        <a href="{{ route('product.show', $item->slug ?? $item->id) }}" class="p-name">{{ $item->name }}</a>
+                        <div class="p-price-row">
+                            <span class="curr-price">Rs. {{ number_format($item->price) }}</span>
+                            <span class="old-price">Rs. {{ number_format($item->price * 1.3) }}</span>
                         </div>
-                        {{-- FIX: Dynamic Slug-based details link --}}
-                        <button onclick="window.location.href='{{ route('product.show', $item->slug ?? $item->id) }}'" 
-                                class="add-cart-btn" 
-                                style="width: 100%; margin-top: 20px; padding: 14px; background: #000; color: #fff; border: none; border-radius: 6px; font-weight: 700; text-transform: uppercase; font-size: 12px; cursor: pointer; letter-spacing: 1px; transition: 0.3s;">
-                            VIEW PRODUCT
-                        </button>                    
+                        <button type="button" onclick="quickView('{{ $item->slug ?? $item->id }}')" class="home-add-btn">
+                            View Product
+                        </button>
                     </div>
                 </div>
                 @empty
-                <div style="grid-column: 1/-1; text-align:center; padding:100px;">
-                    <h3 style="opacity:0.3; font-weight: 800; font-size: 24px;">NO PRODUCTS IN STOCK</h3>
-                    <p style="color: #999;">Check back later for our new collection.</p>
+                <div style="grid-column: 1/-1; text-align:center; padding:50px;">
+                    <h3>Check back later for new stock!</h3>
                 </div>
                 @endforelse
             </div>
-            
-            <div style="text-align:center; margin-top:80px;">
-                <a href="{{ route('shop.all') }}" style="padding:18px 60px; border:2px solid #000; font-weight:800; background:none; color: #000; text-decoration: none; border-radius: 4px; transition: 0.3s;">
-                    VIEW ALL PRODUCTS
-                </a>
-            </div>
         </div>
     </section>
 
-    <!-- =============================================================
-        6. WHY CHOOSE US (TRUST SECTION)
-    ============================================================== -->
-    <section class="section-padding" style="background:#fcfcfc; padding: 100px 0; border-top: 1px solid #eee;">
-        <div class="container">
-            <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; text-align:center;">
-                <div data-aos="fade-up">
-                    <img src="https://cdn-icons-png.flaticon.com/512/1162/1162456.png" style="width:70px; margin-bottom:25px;" alt="Quality">
-                    <h4 style="margin-bottom:15px; font-weight: 800; text-transform: uppercase; font-size: 16px;">Premium Quality</h4>
-                    <p style="font-size:14px; color: #777; line-height: 1.7;">We partner only with the world's most prestigious manufacturers to ensure longevity and style.</p>
-                </div>
-                <div data-aos="fade-up" data-aos-delay="100">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2821/2821785.png" style="width:70px; margin-bottom:25px;" alt="Eco">
-                    <h4 style="margin-bottom:15px; font-weight: 800; text-transform: uppercase; font-size: 16px;">Sustainability</h4>
-                    <p style="font-size:14px; color: #777; line-height: 1.7;">Our mission is to reduce environmental impact through ethical sourcing and recyclable packaging.</p>
-                </div>
-                <div data-aos="fade-up" data-aos-delay="200">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3503/3503194.png" style="width:70px; margin-bottom:25px;" alt="Secure">
-                    <h4 style="margin-bottom:15px; font-weight: 800; text-transform: uppercase; font-size: 16px;">Encrypted Data</h4>
-                    <p style="font-size:14px; color: #777; line-height: 1.7;">Your privacy is our priority. All transactions and personal data are protected by bank-level encryption.</p>
-                </div>
-            </div>
+    <!-- 5. NEWSLETTER -->
+    <section style="padding: 80px 0; background: #000; color: #fff;">
+        <div class="container" style="text-align: center;">
+            <h2 style="font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">Join Zain Elite</h2>
+            <p style="margin: 20px 0 40px; opacity: 0.7; font-size: 15px;">Get 15% off on your first order. No spam, just style.</p>
+            <form style="display: flex; gap: 10px; max-width: 500px; margin: auto; flex-wrap: wrap;">
+                <input type="email" placeholder="Email Address" style="flex: 1; padding: 15px; border-radius: 4px; border: none; outline: none; min-width: 250px;">
+                <button style="padding: 15px 40px; background: #fff; color: #000; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase;">Subscribe</button>
+            </form>
         </div>
     </section>
 
-    <!-- =============================================================
-        7. NEWSLETTER SECTION
-    ============================================================== -->
-    <section class="newsletter-section" style="padding: 100px 0;">
-        <div class="container">
-            <div class="newsletter-card" data-aos="zoom-in" style="background: #000; padding: 80px 40px; border-radius: 30px; color: white; text-align: center; position: relative; overflow: hidden;">
-                <h2 style="font-size:38px; font-weight:800; margin-bottom:20px; text-transform: uppercase; letter-spacing: 2px;">Join The Elite</h2>
-                <p style="font-size: 18px; margin-bottom: 40px; opacity:0.8; max-width: 600px; margin-left: auto; margin-right: auto;">Subscribe today and receive an instant 20% discount voucher for your next luxury purchase.</p>
-                <form class="newsletter-form" style="display: flex; gap: 15px; max-width: 550px; margin: auto; flex-wrap: wrap;">
-                    <input type="email" placeholder="Your premium email address..." style="flex: 1; padding: 20px 25px; border-radius: 8px; border: none; outline: none; font-size: 15px; min-width: 250px;">
-                    <button style="padding: 20px 40px; background: white; color: black; border: none; font-weight: 800; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: 0.3s;">SUBSCRIBE</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
+<script>
+    function quickView(slug) {
+        window.location.href = "/products/" + slug;
+    }
+</script>
 @endsection

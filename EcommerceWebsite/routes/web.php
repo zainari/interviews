@@ -47,12 +47,15 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/home-new', [HomeController::class, 'homenew'])->name('home.new');
 Route::get('/shopall', [HomeController::class, 'shopall'])->name('shop.all');
 Route::get('/products/{product}', [ProductController::class, 'shopingcart'])->name('product.show');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 
 //
 
-Route::post('/cart/add/{id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
-Route::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/remove/{id}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
+// Route::post('/cart/add/{id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+// Route::post('/cart/remove/{id}', [App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::get('/product/{id}', [HomeController::class, 'show'])->name('product.showssad');
 Route::get('/cart/data', [CartController::class, 'getCartData']);
 

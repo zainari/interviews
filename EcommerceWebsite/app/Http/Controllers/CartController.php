@@ -6,65 +6,117 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Expr\FuncCall;
 
 class CartController extends Controller
 {
-    // Show cart page
-    public function index()
+    public function add(Request $request)
     {
-        $cart = session()->get('cart', []);
-        return view('page.cart', compact('cart'));
-    }
-
-    // Add product to cart
-    public function add(Request $request, $id)
-    {
-        $product = Product::findOrFail($id);
+        // 1. Validation
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'size' => 'required',
+            'quantity' => 'required|integer|min:1'
+        ]);
+    
+        $product = Product::findOrFail($request->product_id);
+        $size = $request->size;
+        $qty = $request->quantity;
+    
+        // 2. Cart logic using Session
         $cart = session()->get('cart', []);
     
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity'] += $request->quantity ?? 1;
+        // Unique key for product + size combination
+        $cartKey = $product->id . '-' . $size;
+    
+        if(isset($cart[$cartKey])) {
+            $cart[$cartKey]['quantity'] += $qty;
         } else {
-            $cart[$id] = [
-                'id' => $id,
-                'name' => $product->name,
-                'price' => $product->price,
-                'image' => $product->image_url,
-                'quantity' => $request->quantity ?? 1,
-                // optionally: 'color' => $request->color  if you support variants
+            $cart[$cartKey] = [
+                "id" => $product->id,
+                "name" => $product->name,
+                "quantity" => $qty,
+                "price" => $product->price,
+                "image" => $product->image_url,
+                "size" => $size,
+                "slug" => $product->slug
             ];
         }
     
         session()->put('cart', $cart);
     
-        return response()->json(['status' => 'success', 'cart' => $cart]);
+        // 3. Return JSON response for AJAX
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Item added to bag!', 
+            'cart_count' => count(session('cart')),
+            'cart_html' => view('layout_frontent.mini_cart_items')->render() // Optional: Mini cart update
+        ]);
+    }
+    public function index() {
+        $cart = session()->get('cart', []);
+        // Isse aapko screen par saara data nazar aa jayega jo bag mein hai
+        // dd($cart); 
+        return view('page.cart', compact('cart'));
     }
 
-    public function getCartData()
-    {
-        $cart = session('cart', []);
-        return response()->json(['cart' => $cart]);
-    }
+
+    // // Show cart page
+    // public function index()
+    // {
+    //     $cart = session()->get('cart', []);
+    //     return view('page.cart', compact('cart'));
+    // }
+
+    // // Add product to cart
+    // public function add(Request $request, $id)
+    // {
+    //     $product = Product::findOrFail($id);
+    //     $cart = session()->get('cart', []);
     
-    public function remove(Request $request, $id)
-    {
-        $cart = session()->get('cart', []);
+    //     if (isset($cart[$id])) {
+    //         $cart[$id]['quantity'] += $request->quantity ?? 1;
+    //     } else {
+    //         $cart[$id] = [
+    //             'id' => $id,
+    //             'name' => $product->name,
+    //             'price' => $product->price,
+    //             'image' => $product->image_url,
+    //             'quantity' => $request->quantity ?? 1,
+    //             // optionally: 'color' => $request->color  if you support variants
+    //         ];
+    //     }
     
-        if(isset($cart[$id])) {
+    //     session()->put('cart', $cart);
     
-            // decrease quantity by 1
-            $cart[$id]['quantity'] -= 1;
+    //     return response()->json(['status' => 'success', 'cart' => $cart]);
+    // }
+
+    // public function getCartData()
+    // {
+    //     $cart = session('cart', []);
+    //     return response()->json(['cart' => $cart]);
+    // }
     
-            // if quantity becomes 0 → remove product fully
-            if ($cart[$id]['quantity'] <= 0) {
-                unset($cart[$id]);
-            }
-        }
+    // public function remove(Request $request, $id)
+    // {
+    //     $cart = session()->get('cart', []);
     
-        session()->put('cart', $cart);
+    //     if(isset($cart[$id])) {
     
-        return response()->json(['cart' => $cart]);
-    }
+    //         // decrease quantity by 1
+    //         $cart[$id]['quantity'] -= 1;
+    
+    //         // if quantity becomes 0 → remove product fully
+    //         if ($cart[$id]['quantity'] <= 0) {
+    //             unset($cart[$id]);
+    //         }
+    //     }
+    
+    //     session()->put('cart', $cart);
+    
+    //     return response()->json(['cart' => $cart]);
+    // }
     
     public function checkoutform(Request $request) {
         $cart = session('cart', []);
@@ -92,77 +144,102 @@ class CartController extends Controller
         return view('layout_frontent.checkout_success', compact('order'));
     }
 
-    
-
-    public function placeOrder(Request $request)
+    public function remove(Request $request)
     {
-        $request->validate([
-            'email'          => 'required|email',
-            'first_name'     => 'required|string',
-            'last_name'      => 'required|string',
-            'address'        => 'required|string',
-            'city'           => 'required|string',
-            'country'        => 'required|string',
-            'phone'          => 'required|string',
-            'payment_method' => 'required|string',
-        ]);
-    
-        // Get cart
         $cart = session()->get('cart', []);
-        if (empty($cart)) {
-            return redirect()->back()->with('error', 'Your cart is empty!');
+        $id = $request->id;
+    
+        if(isset($cart[$id])) {
+            unset($cart[$id]);
+            session()->put('cart', $cart);
         }
     
-        // Calculate subtotal
-        $subtotal = collect($cart)->sum(function ($item) {
-            return $item['price'] * $item['quantity'];
-        });
-        
-        // Shipping logic
-        $shipping = 200;
-        
-        // Example: Free shipping above 5000
-        if ($subtotal >= 5000) {
-            $shipping = 0;
-        }
-        
-        $total = $subtotal + $shipping;
-    
-        // Create order
-        $order = Order::create([
-            'user_id'        => Auth::id(),
-            'status'         => 'pending',
-            'first_name'     => $request->first_name,
-            'last_name'      => $request->last_name,
-            'address'        => $request->address,
-            'city'           => $request->city,
-            'country'        => $request->country,
-            'email'          => $request->email,
-            'phone'          => $request->phone,
-            'subtotal'       => $subtotal,
-            'shipping'       => $shipping,
-            'total'          => $total,
-            'payment_method' => $request->payment_method,
-        ]);
-
-        // dd($order);
-    
-        // Attach products to pivot
-        foreach ($cart as $item) {
-            $order->products()->attach($item['id'], [
-                'quantity' => $item['quantity'],
-                'price'    => $item['price'],
-            ]);
-    
-            Product::find($item['id'])?->decrement('stock', $item['quantity']);
-        }
-    
-        // Clear cart
-        session()->forget('cart');
-    
-        // Redirect to success page
-        return redirect()->route('checkout.success', $order->id);
+        return response()->json(['status' => 'success', 'cart' => $cart]);
     }
+    
+    public function update(Request $request)
+    {
+        $cart = session()->get('cart', []);
+        $id = $request->id;
+        $quantity = $request->quantity;
+    
+        if(isset($cart[$id])) {
+            $cart[$id]['quantity'] = $quantity;
+            session()->put('cart', $cart);
+        }
+    
+        return response()->json(['status' => 'success', 'cart' => $cart]);
+    }
+
+    // public function placeOrder(Request $request)
+    // {
+    //     $request->validate([
+    //         'email'          => 'required|email',
+    //         'first_name'     => 'required|string',
+    //         'last_name'      => 'required|string',
+    //         'address'        => 'required|string',
+    //         'city'           => 'required|string',
+    //         'country'        => 'required|string',
+    //         'phone'          => 'required|string',
+    //         'payment_method' => 'required|string',
+    //     ]);
+    
+    //     // Get cart
+    //     $cart = session()->get('cart', []);
+    //     if (empty($cart)) {
+    //         return redirect()->back()->with('error', 'Your cart is empty!');
+    //     }
+    
+    //     // Calculate subtotal
+    //     $subtotal = collect($cart)->sum(function ($item) {
+    //         return $item['price'] * $item['quantity'];
+    //     });
+        
+    //     // Shipping logic
+    //     $shipping = 200;
+        
+    //     // Example: Free shipping above 5000
+    //     if ($subtotal >= 5000) {
+    //         $shipping = 0;
+    //     }
+        
+    //     $total = $subtotal + $shipping;
+    
+    //     // Create order
+    //     $order = Order::create([
+    //         'user_id'        => Auth::id(),
+    //         'status'         => 'pending',
+    //         'first_name'     => $request->first_name,
+    //         'last_name'      => $request->last_name,
+    //         'address'        => $request->address,
+    //         'city'           => $request->city,
+    //         'country'        => $request->country,
+    //         'email'          => $request->email,
+    //         'phone'          => $request->phone,
+    //         'subtotal'       => $subtotal,
+    //         'shipping'       => $shipping,
+    //         'total'          => $total,
+    //         'payment_method' => $request->payment_method,
+    //     ]);
+
+    //     // dd($order);
+    
+    //     // Attach products to pivot
+    //     foreach ($cart as $item) {
+    //         $order->products()->attach($item['id'], [
+    //             'quantity' => $item['quantity'],
+    //             'price'    => $item['price'],
+    //         ]);
+    
+    //         Product::find($item['id'])?->decrement('stock', $item['quantity']);
+    //     }
+    
+    //     // Clear cart
+    //     session()->forget('cart');
+    
+    //     // Redirect to success page
+    //     return redirect()->route('checkout.success', $order->id);
+    // }
     
     
 }

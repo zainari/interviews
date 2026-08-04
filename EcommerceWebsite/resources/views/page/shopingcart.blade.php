@@ -3,6 +3,9 @@
 @section('title', $product->name . ' | EliteStore Premium')
 
 @section('content')
+<!-- SweetAlert2 for professional notifications -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
     :root {
         --black: #000000;
@@ -43,7 +46,7 @@
     .new-price { font-size: 22px; font-weight: 700; color: var(--black); }
     .old-price { font-size: 15px; text-decoration: line-through; color: #aaa; }
 
-    /* Variant Swatches (Color) */
+    /* Color Swatches */
     .option-label { font-size: 12px; font-weight: 700; margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px; }
     .swatches { display: flex; gap: 15px; margin-bottom: 35px; }
     .swatch { 
@@ -52,33 +55,16 @@
     }
     .swatch img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
     .swatch.active { border: 2px solid var(--black); transform: scale(1.05); }
-
-    /* Tooltip */
-    .swatch .tooltip {
-        position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
-        background: #000; color: #fff; padding: 5px 10px; font-size: 10px;
-        border-radius: 4px; white-space: nowrap; visibility: hidden; opacity: 0; transition: 0.3s;
-    }
+    .swatch .tooltip { position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 5px 10px; font-size: 10px; border-radius: 4px; white-space: nowrap; visibility: hidden; opacity: 0; transition: 0.3s; }
     .swatch:hover .tooltip { visibility: visible; opacity: 1; }
 
     /* Size Buttons & Stock Logic */
     .size-grid { display: flex; gap: 12px; margin-bottom: 20px; }
-    .size-btn { 
-        border: 1px solid #ddd; padding: 12px 28px; font-size: 12px; 
-        cursor: pointer; background: #fff; transition: 0.3s; font-weight: 700; 
-        position: relative; overflow: hidden;
-    }
+    .size-btn { border: 1px solid #ddd; padding: 12px 28px; font-size: 12px; cursor: pointer; background: #fff; transition: 0.3s; font-weight: 700; position: relative; overflow: hidden; }
     .size-btn:hover:not(.out-of-stock) { border-color: var(--black); }
     .size-btn.active { background: var(--black); color: #fff; border-color: var(--black); }
-
-    /* Zilbil Out of Stock Style */
-    .size-btn.out-of-stock {
-        color: #ccc; border: 1px dashed #ddd; cursor: not-allowed; opacity: 0.6;
-    }
-    .size-btn.out-of-stock::after {
-        content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px;
-        background: #ccc; transform: rotate(-15deg);
-    }
+    .size-btn.out-of-stock { color: #ccc; border: 1px dashed #ddd; cursor: not-allowed; opacity: 0.6; }
+    .size-btn.out-of-stock::after { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #ccc; transform: rotate(-15deg); }
 
     #stock-message { font-size: 12px; font-weight: 700; margin-bottom: 30px; display: block; }
 
@@ -88,22 +74,20 @@
     .qty-box input { width: 50px; text-align: center; border: none; font-weight: 800; outline: none; font-size: 15px; }
 
     .btn-add-bag { width: 100%; padding: 18px; border: 1px solid var(--black); background: #fff; font-weight: 800; text-transform: uppercase; font-size: 13px; cursor: pointer; margin-bottom: 12px; transition: 0.4s; letter-spacing: 1px; }
-    .btn-add-bag:disabled { background: #f1f1f1; border-color: #ddd; color: #aaa; cursor: not-allowed; }
+    .btn-add-bag:hover { background: var(--gray-light); }
+    .btn-add-bag:disabled { background: #f1f1f1; color: #aaa; border-color: #ddd; cursor: not-allowed; }
     
     .btn-buy-now { width: 100%; padding: 18px; border: 1px solid var(--black); background: var(--black); color: #fff; font-weight: 800; text-transform: uppercase; font-size: 13px; cursor: pointer; margin-bottom: 40px; transition: 0.4s; letter-spacing: 1px; }
 
-    /* Rest of Zilbil Styles */
     .info-icons { display: flex; gap: 30px; border-top: 1px solid #eee; padding-top: 25px; margin-bottom: 45px; }
     .icon-item { display: flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #333; }
-    .description-box h4 { font-size: 14px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 10px; font-weight: 800; }
-    .description-box p { font-size: 13px; line-height: 1.9; color: #666; margin-bottom: 50px; }
     
+    /* Size Chart & Related Grid */
     .size-table-container { margin-bottom: 80px; }
     .size-table { width: 100%; border-collapse: collapse; }
     .size-table th, .size-table td { border: 1px solid #eee; padding: 14px; text-align: center; font-size: 12px; text-transform: uppercase; }
     .size-table th { background: #000; color: #fff; }
 
-    /* Related Grid */
     .related-section { border-top: 1px solid #eee; padding: 80px 5%; }
     .related-title { font-size: 22px; font-weight: 500; text-transform: uppercase; margin-bottom: 45px; letter-spacing: 2px; }
     .related-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; }
@@ -155,7 +139,7 @@
             <span class="old-price">Rs. {{ number_format($product->price * 1.3) }}</span>
         </div>
 
-        <!-- Variants (Zilbil Style Swatches) -->
+        <!-- Variants -->
         @if(isset($variants) && count($variants) > 0)
             @php $currColor = $product->attributes->where('name', 'Color')->first()->pivot->value ?? ''; @endphp
             <span class="option-label">Color: <span id="colorName">{{ $currColor }}</span></span>
@@ -170,14 +154,13 @@
             </div>
         @endif
 
-        <!-- Sizes Logic (The main request) -->
+        <!-- Sizes Selection -->
         @php $sizes = $product->attributes->where('name', 'Size'); @endphp
         @if($sizes->count() > 0)
             <span class="option-label">Select Size: <span id="selectedSizeName"></span></span>
             <div class="size-grid">
                 @foreach($sizes as $size)
                     @php 
-                        // Fetch stock for this specific size
                         $sStock = $product->sizeStocks->where('size', $size->pivot->value)->first();
                         $isOut = (!$sStock || $sStock->stock <= 0);
                     @endphp
@@ -190,7 +173,6 @@
             </div>
         @endif
 
-        <!-- Dynamic Stock Message -->
         <span id="stock-message"></span>
 
         <span class="option-label">Quantity</span>
@@ -200,8 +182,9 @@
             <button onclick="qtyUpdate(1)">+</button>
         </div>
 
-        <button id="main-cart-btn" class="btn-add-bag">Add to Bag</button>
-        <button id="buy-now-btn" class="btn-buy-now">Buy it now</button>
+        {{-- CALL TO ACTION BUTTONS --}}
+        <button type="button" id="main-cart-btn" onclick="addToBag()" class="btn-add-bag">Add to Bag</button>
+        <button type="button" id="buy-now-btn" class="btn-buy-now">Buy it now</button>
 
         <div class="info-icons">
             <div class="icon-item"><i class="fas fa-truck"></i> Free Shipping</div>
@@ -210,12 +193,13 @@
 
         <div class="description-box">
             <h4>Description</h4>
+            <br>
             <p>{{ $product->description }}</p>
         </div>
-
-        <!-- Size Chart -->
+<br>
         <div class="size-table-container">
             <h4>Size Guide (Inches)</h4>
+            <br>
             <table class="size-table">
                 <thead><tr><th>Size</th><th>Chest</th><th>Length</th><th>Shoulder</th></tr></thead>
                 <tbody>
@@ -244,34 +228,35 @@
 </div>
 
 <script>
-    // 1. Image Swapping
+    // Selected states
+    let selectedSize = null;
+
+    // 1. Image Swap
     function swapImage(src, element) {
         document.getElementById('mainViewer').src = src;
         document.querySelectorAll('.thumb-item').forEach(i => i.classList.remove('active'));
         element.classList.add('active');
     }
 
-    // 2. Zilbil Style Size & Stock Selection Logic
+    // 2. Handle Size Selection
     function handleSizeSelect(sizeName, stockQty, element) {
-        // Highlight active size
+        selectedSize = sizeName; // Set global variable
+        
         document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
         element.classList.add('active');
         document.getElementById('selectedSizeName').innerText = sizeName;
 
         let msg = document.getElementById('stock-message');
         let cartBtn = document.getElementById('main-cart-btn');
-        let buyBtn = document.getElementById('buy-now-btn');
 
         if(stockQty <= 0) {
             msg.innerHTML = '<span style="color:var(--danger)">Sold Out</span>';
             cartBtn.disabled = true;
             cartBtn.innerText = "Sold Out";
-            buyBtn.style.display = "none";
         } else {
             msg.innerHTML = '<span style="color:#1a7d32"><i class="fas fa-check"></i> In stock, and ready to ship</span>';
             cartBtn.disabled = false;
             cartBtn.innerText = "Add to Bag";
-            buyBtn.style.display = "block";
         }
     }
 
@@ -279,6 +264,61 @@
         let input = document.getElementById('qtyInput');
         let current = parseInt(input.value);
         if(current + val >= 1) input.value = current + val;
+    }
+
+    // 3. Add to Bag Logic (AJAX)
+    function addToBag() {
+        // Validation: Size must be selected
+        if (!selectedSize) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Select a size',
+                text: 'Please choose your size before adding to bag.',
+                confirmButtonColor: '#000'
+            });
+            return;
+        }
+
+        let productId = "{{ $product->id }}";
+        let quantity = document.getElementById('qtyInput').value;
+
+        // AJAX Request
+        fetch("{{ route('cart.add') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                size: selectedSize,
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.status === 'success') {
+                // Update Navbar Cart Count (Select all elements with .count inside .cart-icon)
+                document.querySelectorAll('.cart-icon .count').forEach(el => {
+                    el.innerText = data.cart_count;
+                });
+
+                // Success Toast
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Item added to bag!',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    timerProgressBar: true
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+        });
     }
 </script>
 @endsection
