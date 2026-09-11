@@ -1,6 +1,6 @@
 @extends('layout_admin.app')
 
-@section('title', 'Categories | Admin Panel')
+@section('title', 'Categories | Wasaaz')
 @section('page_title', '')
 
 @section('content')

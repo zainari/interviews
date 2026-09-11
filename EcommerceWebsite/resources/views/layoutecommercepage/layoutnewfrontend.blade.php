@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>EliteStore | Premium Boutique & Apparel</title>
+    <title>@yield('title', 'Wasaaz | Premium Boutique & Apparel')</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
         body { background-color: var(--light); color: var(--primary); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
         a { text-decoration: none; color: inherit; transition: var(--transition-smooth); }
         ul { list-style: none; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 30px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 30px; width: 100%; }
         img { max-width: 100%; height: auto; }
 
         /* --- Custom Scrollbar --- */
@@ -78,6 +78,14 @@
             padding: 20px 0; 
         }
         
+        .logo-box {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--primary);
+        }
+        .logo-box span { font-weight: 300; color: var(--accent); }
         .logo-img { 
             height: 40px; 
             width: auto; 
@@ -165,7 +173,8 @@
             place-items: center;
         }
 
-        .mobile-toggle { display: none; font-size: 20px; cursor: pointer; color: var(--primary); }
+        .mobile-toggle { display: none; font-size: 20px; cursor: pointer; color: var(--primary); width: 40px; height: 40px; align-items: center; justify-content: center; border-radius: 50%; transition: var(--transition-smooth); }
+        .mobile-toggle:hover { background: var(--light); }
 
         /* --- Minimalist Bottom Navigation Menu --- */
         .bottom-nav { 
@@ -350,13 +359,15 @@
             position: fixed; 
             top: 0; 
             left: -100%; 
-            width: 320px; 
+            width: min(320px, 85vw); 
             height: 100%; 
             background: var(--white); 
             z-index: 2000; 
             transition: var(--transition-smooth); 
             box-shadow: var(--shadow-lg); 
-            padding: 40px 30px; 
+            padding: 24px 22px; 
+            display: flex;
+            flex-direction: column;
         }
         .mobile-drawer.active { left: 0; }
         .drawer-overlay { 
@@ -371,8 +382,23 @@
             display: none; 
         }
         .drawer-overlay.active { display: block; }
-        .mobile-menu li { margin-bottom: 24px; }
-        .mobile-menu li a { font-weight: 700; font-size: 16px; letter-spacing: 1.5px; text-transform: uppercase; }
+        .drawer-search { margin-bottom: 24px; }
+        .drawer-search form { display: flex; background: var(--light); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: var(--transition-smooth); }
+        .drawer-search form:focus-within { background: var(--white); border-color: var(--primary); }
+        .drawer-search input { flex: 1; border: none; background: transparent; padding: 12px 15px; outline: none; font-size: 13px; color: var(--primary); }
+        .drawer-search button { border: none; background: var(--primary); color: var(--white); padding: 0 16px; cursor: pointer; transition: var(--transition-smooth); }
+        .drawer-search button:hover { background: var(--accent); }
+        .mobile-menu { flex: 1; overflow-y: auto; padding-bottom: 10px; }
+        .mobile-menu li { margin-bottom: 14px; }
+        .mobile-menu li a { font-weight: 700; font-size: 15px; letter-spacing: 1.2px; text-transform: uppercase; display: block; padding: 8px 0; position: relative; transition: var(--transition-smooth); }
+        .mobile-menu li a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--primary); transition: var(--transition-smooth); }
+        .mobile-menu li a:hover { color: var(--accent); padding-left: 8px; }
+        .mobile-menu li a:hover::after { width: 40px; }
+        .drawer-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border); }
+        .drawer-footer p { font-size: 11px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+        .drawer-social { display: flex; gap: 10px; }
+        .drawer-social a { width: 34px; height: 34px; background: var(--light); border: 1px solid var(--border); border-radius: 50%; display: grid; place-items: center; color: var(--primary); font-size: 13px; transition: var(--transition-smooth); }
+        .drawer-social a:hover { background: var(--primary); color: var(--white); border-color: var(--primary); }
 
         /* --- RESPONSIVE LAYOUT SCALING --- */
         @media (max-width: 1200px) {
@@ -382,29 +408,58 @@
         @media (max-width: 991px) {
             .nav-main .search-bar { display: none; }
             .bottom-nav { display: none; }
-            .mobile-toggle { display: block; }
+            .mobile-toggle { display: flex; }
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
         }
 
         @media (max-width: 768px) {
-            .footer-grid { grid-template-columns: 1fr; gap: 35px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+            .footer-col h4 { margin-bottom: 18px; }
+            .footer-contact p { justify-content: center; }
+            .nav-actions { gap: 12px; }
+            .nav-actions .icon-box { width: 36px; height: 36px; font-size: 16px; }
             .nav-actions .icon-box:nth-child(1) { display: none; } /* Hide user profile on tiny width */
+            .footer-bottom { flex-direction: column; text-align: center; margin-top: 50px; padding-top: 30px; gap: 15px; }
+            .social-links { justify-content: center; }
         }
+        @media (max-width: 480px) {
+            .container { padding: 0 14px; }
+            .top-header { font-size: 9px; padding: 10px 0; letter-spacing: 1px; }
+            .nav-main { padding: 14px 0; }
+            .logo-img { height: 32px; }
+            .mobile-toggle { width: 38px; height: 38px; }
+            .footer-grid { gap: 28px; }
+        }
+
+        /* --- Mobile Search Bar --- */
+        .mobile-search-bar { display: none; background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 0; }
+        .mobile-search-bar form { display: flex; background: var(--light); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: var(--transition-smooth); }
+        .mobile-search-bar form:focus-within { background: var(--white); border-color: var(--primary); }
+        .mobile-search-bar input { flex: 1; border: none; background: transparent; padding: 12px 15px; outline: none; font-size: 13px; color: var(--primary); }
+        .mobile-search-bar button { border: none; background: var(--primary); color: var(--white); padding: 0 18px; cursor: pointer; transition: var(--transition-smooth); }
+        .mobile-search-bar button:hover { background: var(--accent); }
+        @media (max-width: 991px) { .mobile-search-bar { display: block; } }
     </style>
 </head>
 <body>
 
     <!-- 1. Announcement Bar -->
     <div class="top-header">
-        🔥 MEGA SALE IS LIVE! GET UP TO 60% OFF ON ALL NEW ARRIVALS. FREE SHIPPING ON ORDERS OVER $250.
+        NEW DROP LIVE — FREE SHIPPING ON ORDERS OVER RS. 5,000
     </div>
 
     <!-- 2. Mobile Navigation Drawer -->
     <div class="drawer-overlay" id="overlay"></div>
     <div class="mobile-drawer" id="drawer">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
-            <a href="/" class="logo" style="font-size:20px; font-weight:900; letter-spacing:1px; text-transform:uppercase;">ELITE<span>STORE</span></a>
-            <i class="fas fa-times" id="closeDrawer" style="font-size:20px; cursor:pointer; color: var(--secondary);"></i>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <a href="/" class="logo" style="font-size:20px; font-weight:900; letter-spacing:1px; text-transform:uppercase;">WASA<span>AZ</span></a>
+            <i class="fas fa-times" id="closeDrawer" style="font-size:18px; cursor:pointer; color: var(--secondary); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%;"></i>
+        </div>
+        <div class="drawer-search">
+            <form action="{{ route('shop.all') }}" method="GET">
+                <input type="text" name="search" placeholder="Search..." value="{{ request('search') }}">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
         </div>
         <ul class="mobile-menu">
             <li><a href="{{route('shop.all')}}">SHOP ALL</a></li>
@@ -412,8 +467,16 @@
             <li><a href="#">FASHION</a></li>
             <li><a href="#">HOME & GARDEN</a></li>
             <li><a href="#">BEAUTY & HEALTH</a></li>
-            <li><a href="#" style="color:var(--danger)">MEGA DEALS</a></li>
+            <li><a href="#" style="color:var(--danger)">NEW DROP</a></li>
         </ul>
+        <div class="drawer-footer">
+            <p>Premium curated fashion, tech and lifestyle products delivered to your door.</p>
+            <div class="drawer-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
     </div>
 
     <!-- 3. Main Sticky Header -->
@@ -424,9 +487,7 @@
                     <i class="fas fa-bars"></i>
                 </div>
 
-                <a href="{{route('home.new')}}" class="logo-box">
-                    <img src="{{ asset('img/logo.png') }}" alt="EliteStore Logo" class="logo-img">
-                </a>
+                <a href="{{route('home.new')}}" class="logo-box">WASA<span>AZ</span></a>
                 
                 <!-- Expanded Minimal Search Bar -->
                 <div class="search-bar">
@@ -460,6 +521,16 @@
         </div>
     </header>
 
+    <!-- Mobile Search Bar -->
+    <div class="mobile-search-bar">
+        <div class="container">
+            <form action="{{ route('shop.all') }}" method="GET">
+                <input type="text" name="search" placeholder="Search for products, brands and more..." value="{{ request('search') }}">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+    </div>
+
     <!-- 4. Categories Navigation (Desktop) -->
     <nav class="bottom-nav">
         <div class="container">
@@ -470,7 +541,7 @@
                 <li><a href="#">HOME & GARDEN</a></li>
                 <li><a href="#">BEAUTY & HEALTH</a></li>
                 <li><a href="#">FLASH DEALS</a></li>
-                <li style="color: var(--danger);"><a href="#">MEGA SALE</a></li>
+                <li style="color: var(--danger);"><a href="#">NEW DROP</a></li>
             </ul>
         </div>
     </nav>
@@ -485,8 +556,8 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <a href="/" class="footer-logo">ELITE<span>STORE</span></a>
-                    <p style="color:var(--secondary); line-height:1.7; margin-bottom:25px; font-size:13px; font-weight:500;">Premium, curated fashion, technical hardware and lifestyle design staples right at your doorstep.</p>
+                    <a href="/" class="footer-logo">WASA<span>AZ</span></a>
+                    <p style="color:var(--secondary); line-height:1.7; margin-bottom:25px; font-size:13px; font-weight:500;">Handcrafted statement apparel that blends identity, culture, and contemporary style.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
@@ -516,15 +587,15 @@
                 </div>
                 <div class="footer-col footer-contact">
                     <h4>Get In Touch</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> 455 Elite Tower, Business District, Karachi</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Wasaaz Studio, Business District, Karachi</p>
                     <p><i class="fas fa-phone-alt"></i> +92 21 111 222 333</p>
-                    <p><i class="fas fa-envelope"></i> help@elitestore.com</p>
+                    <p><i class="fas fa-envelope"></i> hello@wasaaz.com</p>
                     <p><i class="fas fa-clock"></i> Mon - Sat / 9:00 AM - 8:00 PM</p>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p style="color:var(--muted); font-size:12px; font-weight: 500;">&copy; {{ date('Y') }} EliteStore Global Private Ltd. All Rights Reserved.</p>
+                <p style="color:var(--muted); font-size:12px; font-weight: 500;">&copy; {{ date('Y') }} Wasaaz Global Private Ltd. All Rights Reserved.</p>
                 <div style="display:flex; gap:15px; opacity:0.5; filter: grayscale(1);">
                     <img src="https://cdn-icons-png.flaticon.com/512/196/196070.png" style="height:20px;">
                     <img src="https://cdn-icons-png.flaticon.com/512/196/196086.png" style="height:20px;">
@@ -558,6 +629,14 @@
         overlay.addEventListener('click', () => {
             drawer.classList.remove('active');
             overlay.classList.remove('active');
+        });
+
+        // Close drawer when clicking a menu link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                drawer.classList.remove('active');
+                overlay.classList.remove('active');
+            });
         });
 
         // Header Scroll Effect
@@ -613,7 +692,7 @@
                                 item.innerHTML = `
                                     <img class="suggestion-img" src="${imageUrl}" alt="${product.name}">
                                     <div class="suggestion-details">
-                                        <span class="suggestion-brand">${product.brand || 'Elite Select'}</span>
+                                        <span class="suggestion-brand">${product.brand || 'WASA SELECT'}</span>
                                         <span class="suggestion-name">${product.name}</span>
                                         <span class="suggestion-price">Rs. ${parseFloat(product.price).toLocaleString()}</span>
                                     </div>

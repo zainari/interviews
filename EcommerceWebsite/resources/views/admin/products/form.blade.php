@@ -1,6 +1,6 @@
 @extends('layout_admin.app')
 
-@section('title', 'Add Product | Admin Panel')
+@section('title', 'Add Product | Wasaaz')
 
 @section('content')
 <!-- Professional Select2 CSS -->

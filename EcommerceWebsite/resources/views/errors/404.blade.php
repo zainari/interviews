@@ -1,78 +1,96 @@
-<!-- resources/views/errors/404.blade.php -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found - 404</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@extends('layoutecommercepage.layoutnewfrontend')
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            background: #f2f2f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #333;
-        }
+@section('title', 'Page Not Found | Wasaaz')
 
-        .container {
-            text-align: center;
-            background: #fff;
-            padding: 60px 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 500px;
-        }
+@section('content')
 
-        h1 {
-            font-size: 120px;
-            margin: 0;
-            color: #FF6B6B;
-        }
+<style>
+    .error-page {
+        min-height: calc(100vh - 180px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--light);
+        text-align: center;
+        padding: 80px 20px;
+    }
+    .error-content {
+        max-width: 560px;
+    }
+    .error-content .number {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(80px, 14vw, 140px);
+        font-weight: 600;
+        color: var(--primary);
+        line-height: 1;
+        margin-bottom: 10px;
+        letter-spacing: -2px;
+    }
+    .error-content h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(24px, 4vw, 34px);
+        color: var(--primary);
+        margin-bottom: 16px;
+        font-weight: 600;
+    }
+    .error-content p {
+        color: var(--secondary);
+        font-size: 15px;
+        line-height: 1.8;
+        margin-bottom: 36px;
+    }
+    .error-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .error-actions a {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 30px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        transition: var(--transition-smooth);
+    }
+    .error-actions .primary {
+        background: var(--primary);
+        color: var(--white);
+    }
+    .error-actions .primary:hover {
+        background: var(--accent);
+    }
+    .error-actions .outline {
+        background: transparent;
+        color: var(--primary);
+        border: 1px solid var(--border);
+    }
+    .error-actions .outline:hover {
+        background: var(--primary);
+        color: var(--white);
+        border-color: var(--primary);
+    }
 
-        h2 {
-            font-size: 28px;
-            margin: 20px 0 10px;
-        }
+    @media (max-width: 480px) {
+        .error-page { padding: 60px 15px; }
+        .error-actions a { width: 100%; justify-content: center; }
+    }
+</style>
 
-        p {
-            font-size: 18px;
-            margin-bottom: 30px;
-            color: #666;
-        }
-
-        a {
-            display: inline-block;
-            text-decoration: none;
-            background: #3490dc;
-            color: #fff;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        a:hover {
-            background: #2779bd;
-        }
-
-        @media(max-width: 600px) {
-            h1 { font-size: 80px; }
-            h2 { font-size: 24px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>404</h1>
+<section class="error-page">
+    <div class="error-content">
+        <p class="number">404</p>
         <h2>Page Not Found</h2>
-        <p>Sorry, the page you are looking for doesn’t exist or has been moved.</p>
-        <a href="{{ url('/') }}">Go Back Home</a>
+        <p>Sorry, the page you are looking for does not exist or may have been moved. Let us help you get back on track.</p>
+        <div class="error-actions">
+            <a href="{{ route('home.new') }}" class="primary"><i class="fas fa-home"></i> Back to Home</a>
+            <a href="{{ route('shop.all') }}" class="outline"><i class="fas fa-shopping-bag"></i> Continue Shopping</a>
+        </div>
     </div>
-</body>
-</html>
+</section>
+
+@endsection
