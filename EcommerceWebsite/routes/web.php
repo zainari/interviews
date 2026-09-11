@@ -10,6 +10,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Middleware\CheckLogin;
 use Illuminate\Support\Facades\Route;
 
@@ -43,8 +44,8 @@ Route::get('/product', function () {
     return view('page/product');
 });
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home-new', [HomeController::class, 'homenew'])->name('home.new');
+Route::get('home-old', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'homenew'])->name('home.new');
 Route::get('/shopall', [HomeController::class, 'shopall'])->name('shop.all');
 Route::get('/products/{product}', [ProductController::class, 'shopingcart'])->name('product.show');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
@@ -103,6 +104,15 @@ Route::middleware([CheckLogin::class])->group(function () {
     Route::get('orders',[OrderController::class,'index'])->name('orders.index');
 });
 
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::delete('/wishlist/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+});
+
+Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
 // Chatbot Routes
 

@@ -15,18 +15,12 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    // ===========================
-    // ✅ ADMIN: LIST PRODUCTS
-    // ===========================
     public function index()
     {
         $products = Product::with(['category', 'attributes'])->orderBy('id', 'desc')->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
-    // ===========================
-    // ✅ ADMIN: CREATE PAGE
-    // ===========================
     public function create()
     {
         $categories = Category::all();
@@ -34,9 +28,6 @@ class ProductController extends Controller
         return view('admin.products.form', compact('categories', 'attributes'));
     }
 
-    // ===========================
-    // ✅ ADMIN: STORE PRODUCT
-    // ===========================
     public function store(Request $request)
     {
         $request->validate([
@@ -94,6 +85,7 @@ class ProductController extends Controller
             }
         }
 
+
         // 5. Attributes (Colors/Sizes)
         if ($request->filled('attributes')) {
             foreach ($request->input('attributes') as $attributeId => $valueIds) {
@@ -113,9 +105,6 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product and Size-Stock created!');
     }
 
-    // ===========================
-    // ✅ ADMIN: EDIT PAGE
-    // ===========================
     public function edit(Product $product)
     {
         $categories = Category::all();
@@ -129,14 +118,11 @@ class ProductController extends Controller
         return view('admin.products.edit', compact('product', 'categories', 'attributes', 'selectedAttributes'));
     }
 
-    // ===========================
-    // ✅ ADMIN: UPDATE PRODUCT
-    // ===========================
     public function update(Request $request, Product $product)
     {
         $request->validate([
             'name'           => 'required|string|max:255',
-            'sku'            => 'required|string|max:255|unique:products,sku,' . $product->id,
+            'sku'            => 'required|string|m ax:255|unique:products,s  ku,' . $product->id,
             'category_id'    => 'required|exists:categories,id',
             'price'          => 'required|numeric|min:0',
             'size_stock'     => 'nullable|array',
@@ -202,9 +188,6 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product Updated Successfully!');
     }
 
-    // ===========================
-    // ✅ ADMIN: DELETE IMAGE
-    // ===========================
     public function deleteImage($id)
     {
         $image = ProductImage::findOrFail($id);
@@ -215,9 +198,6 @@ class ProductController extends Controller
         return back()->with('success', 'Gallery image removed!');
     }
 
-    // ===========================
-    // ✅ ADMIN: DELETE PRODUCT
-    // ===========================
     public function destroy(Product $product)
     {
         // 1. Delete Main Image
@@ -235,9 +215,6 @@ class ProductController extends Controller
     }
 
 
-    // ===========================
-    // 🛒 FRONTEND: PRODUCT DETAIL
-    // ===========================
     public function shopingcart($slug)
     {
         // Find by slug (Zilbil Style) or fail

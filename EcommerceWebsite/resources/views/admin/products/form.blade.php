@@ -47,7 +47,6 @@
 
     <div class="page-header" style="margin-bottom: 30px;">
         <h2 style="font-size: 24px; font-weight: 800;">Add New Product</h2>
-        <p style="color: #666;">Step 1: Fill details -> Step 2: Set stock per size -> Step 3: Save.</p>
     </div>
 
     <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="product-card">

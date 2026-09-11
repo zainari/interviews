@@ -60,4 +60,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductSizeStock::class);
     }
+
+    public function wishlistedBy()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

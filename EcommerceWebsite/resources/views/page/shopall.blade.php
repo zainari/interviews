@@ -3,6 +3,9 @@
 @section('title', 'Shop All | EliteStore Premium')
 
 @section('content')
+<!-- SweetAlert2 (For Login Popups) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <style>
     /* --- Shop Page Specific Styles --- */
     .shop-wrapper { padding: 40px 0; background: #fcfcfc; margin-top: 20px; }
@@ -149,17 +152,29 @@
                 <!-- Product Grid -->
                 <div class="product-grid">
                     @forelse($product as $item)
+                        @php
+                            // Check if current logged-in user has this product in wishlist
+                            $isWishlisted = false;
+                            if(auth()->check()) {
+                                $isWishlisted = auth()->user()->wishlists->contains('product_id', $item->id);
+                            }
+                        @endphp
                     <div class="product-card" data-aos="fade-up" style="background: white; border-radius: 12px; padding: 0; border: none; transition: 0.4s;">
                         <div class="p-img-box">
                             <span class="badge-sale" style="position: absolute; top: 15px; left: 15px; background: #000; color: #fff; padding: 4px 12px; font-size: 10px; font-weight: 800; border-radius: 4px; z-index: 5;">NEW</span>
                             
-                            {{-- Route Model Binding Fix: Using slug with id fallback --}}
+                            {{-- Route Model Binding --}}
                             <a href="{{ route('product.show', $item->slug ?? $item->id) }}">
                                 <img src="{{ Str::startsWith($item->image_url, 'http') ? $item->image_url : asset('storage/' . $item->image_url) }}" alt="{{ $item->name }}">
                             </a>
 
+                            <!-- Wishlist Toggle Action -->
                             <div class="p-actions" style="position: absolute; right: 15px; top: 15px; display: flex; flex-direction: column; gap: 8px;">
-                                <div class="p-btn" style="width: 38px; height: 38px; background: white; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;"><i class="far fa-heart"></i></div>
+                                <div class="p-btn" 
+                                     onclick="toggleWishlist({{ $item->id }}, this)" 
+                                     style="width: 38px; height: 38px; background: white; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; color: {{ $isWishlisted ? 'red' : 'inherit' }};">
+                                    <i class="{{ $isWishlisted ? 'fa-solid fas' : 'fa-regular far' }} fa-heart"></i>
+                                </div>
                             </div>
                         </div>
 
@@ -173,7 +188,6 @@
                                 <div style="font-size: 12px; color: #cbd5e1; text-decoration: line-through;">Rs. {{ number_format($item->price * 1.4) }}</div>
                             </div>
 
-                            {{-- Dynamic Slug-based route for View Details button --}}
                             <button onclick="window.location.href='{{ route('product.show', $item->slug ?? $item->id) }}'" class="add-cart-btn">
                                 View Details
                             </button>
@@ -221,14 +235,82 @@
     if(openFilters) {
         openFilters.addEventListener('click', () => {
             shopSidebar.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Stop scrolling
+            document.body.style.overflow = 'hidden';
         });
     }
 
     if(closeFilters) {
         closeFilters.addEventListener('click', () => {
             shopSidebar.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Enable scrolling
+            document.body.style.overflow = 'auto';
+        });
+    }
+
+    // Wishlist Toggle Function with Ajax & SweetAlert
+    function toggleWishlist(productId, el) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]') 
+            ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+            : '{{ csrf_token() }}';
+
+        fetch("{{ route('wishlist.toggle') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ product_id: productId })
+        })
+        .then(res => {
+            if (res.status === 401) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Login Required',
+                    text: 'Please login to add items to your wishlist.',
+                    confirmButtonText: 'Login',
+                    showCancelButton: true,
+                    confirmButtonColor: '#000000',
+                    cancelButtonColor: '#64748b'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('user.login') }}";
+                    }
+                });
+                throw new Error('guest');
+            }
+            return res.json();
+        })
+        .then(data => {
+            const icon = el.querySelector('i');
+            if (data.status === 'added') {
+                icon.classList.remove('fa-regular', 'far');
+                icon.classList.add('fa-solid', 'fas');
+                el.style.color = 'red';
+            } else {
+                icon.classList.remove('fa-solid', 'fas');
+                icon.classList.add('fa-regular', 'far');
+                el.style.color = '';
+            }
+
+            // Navbar counter update
+            const wishlistBadge = document.getElementById('wishlist-count');
+            if (wishlistBadge) {
+                wishlistBadge.innerText = data.count;
+            }
+
+            Swal.fire({
+                icon: 'success',
+                title: data.message,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        })
+        .catch(err => {
+            if (err.message !== 'guest') {
+                console.error('Wishlist error:', err);
+            }
         });
     }
 </script>
