@@ -13,14 +13,14 @@
 
     <style>
         :root {
-            --primary: #111111;
-            --light: #faf9f6;
-            --accent: #8c8276;
-            --secondary: #555555;
-            --border: #e8e6e1;
-            --white: #ffffff;
-            --danger: #b22222;
-            --shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+            --primary: #ffffff;
+            --light: #0a0a0a;
+            --accent: #c9a86c;
+            --secondary: #888888;
+            --border: #1f1f1f;
+            --white: #111111;
+            --danger: #ef4444;
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
             --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
@@ -33,6 +33,7 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--light);
+            background-image: radial-gradient(circle at 50% 0%, rgba(122, 31, 42, 0.18), transparent 60%);
             color: var(--primary);
             min-height: 100vh;
             display: flex;
@@ -113,7 +114,7 @@
             width: 100%;
             padding: 14px 16px;
             border: 1px solid var(--border);
-            background: var(--white);
+            background: var(--light);
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 14px;
             color: var(--primary);
@@ -122,8 +123,8 @@
         }
 
         input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.04);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(201, 168, 108, 0.12);
         }
 
         input::placeholder {

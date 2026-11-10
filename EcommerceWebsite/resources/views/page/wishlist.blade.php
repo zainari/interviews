@@ -8,12 +8,12 @@
 
 <style>
     :root {
-        --primary-neutral: #111111;
-        --secondary-neutral: #555555;
-        --accent-neutral: #8c8276;
-        --warm-bg: #faf9f6;
-        --white-bg: #ffffff;
-        --light-border: #e8e6e1;
+        --primary-neutral: #ffffff;
+        --secondary-neutral: #888888;
+        --accent-neutral: #c9a86c;
+        --warm-bg: #0a0a0a;
+        --white-bg: #111111;
+        --light-border: #1f1f1f;
         --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
@@ -36,12 +36,12 @@
     .wishlist-card { background: var(--white-bg); border: 1px solid var(--light-border); overflow: hidden; transition: var(--transition-smooth); position: relative; display: flex; flex-direction: column; }
     .wishlist-card:hover { border-color: var(--primary-neutral); box-shadow: 0 20px 40px rgba(0,0,0,0.04); transform: translateY(-5px); }
 
-    .p-img-box { height: clamp(260px, 30vw, 380px); background: #fbfbfb; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+    .p-img-box { height: clamp(260px, 30vw, 380px); background: #161616; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
     .p-img-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     .wishlist-card:hover .p-img-box img { transform: scale(1.05); }
 
     .wishlist-remove-form { position: absolute; top: 12px; right: 12px; z-index: 10; }
-    .wishlist-remove-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.95); border: 1px solid var(--light-border); color: var(--primary-neutral); display: grid; place-items: center; cursor: pointer; transition: var(--transition-smooth); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .wishlist-remove-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(20,20,20,0.9); border: 1px solid var(--light-border); color: var(--primary-neutral); display: grid; place-items: center; cursor: pointer; transition: var(--transition-smooth); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     .wishlist-remove-btn:hover { background: var(--primary-neutral); color: var(--white-bg); border-color: var(--primary-neutral); transform: scale(1.05); }
 
     .p-info { padding: 22px 18px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; }

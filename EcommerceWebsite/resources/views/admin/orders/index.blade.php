@@ -1,199 +1,87 @@
 @extends('layout_admin.app')
 
 @section('title', 'Orders | Wasaaz')
-@section('page_title', '')
+@section('page_title', 'Orders')
 
 @section('content')
 <div class="orders-container">
   <div class="orders-header">
     <h2>Orders</h2>
-    {{-- <button class="btn add-btn" id="addordersBtn">+ Add Orders</button> --}}
+    <span style="color: var(--wa-muted); font-size: 13px;">{{ $orders->total() }} total orders</span>
   </div>
 
-  <!-- Flash Messages -->
   @if(session('success'))
-    <div class="alert success" id="flashMessage">
-      <strong> Success:</strong> {{ session('success') }}
-    </div>
+    <div class="alert success" id="flashMessage"><strong>Success:</strong> {{ session('success') }}</div>
   @endif
   @if(session('error'))
-    <div class="alert error" id="flashMessage">
-      <strong>⚠️ Error:</strong> {{ session('error') }}
-    </div>
+    <div class="alert error" id="flashMessage"><strong>Error:</strong> {{ session('error') }}</div>
   @endif
 
-  <!-- Validation Errors -->
-  @if ($errors->any())
-    <div class="alert error" id="validationErrors">
-      <strong>⚠️ Please fix the following errors:</strong>
-      <ul>
-        @foreach ($errors->all() as $error)
-          <li>{{ $error }}</li>
-        @endforeach
-      </ul>
+  <div class="orders-table-wrapper">
+    <div class="orders-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Customer</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Placed</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($orders as $ord)
+          @php
+            $badgeMap = [
+              'pending' => 'badge-warning', 'paid' => 'badge-success',
+              'processing' => 'badge-info', 'shipped' => 'badge-info',
+              'delivered' => 'badge-success', 'completed' => 'badge-success',
+              'cancelled' => 'badge-danger',
+            ];
+          @endphp
+          <tr>
+            <td data-label="Order" style="font-weight:700;">#{{ $ord->id }}</td>
+            <td data-label="Customer">{{ $ord->first_name }} {{ $ord->last_name }}<br><span style="color: var(--wa-muted); font-size:12px;">{{ $ord->email }}</span></td>
+            <td data-label="Phone">{{ $ord->phone }}</td>
+            <td data-label="City">{{ $ord->city }}</td>
+            <td data-label="Total" style="font-weight:700;">Rs. {{ number_format($ord->total, 2) }}</td>
+            <td data-label="Payment">{{ strtoupper($ord->payment_method) }}</td>
+            <td data-label="Status">
+              <form method="POST" action="{{ route('orders.status', $ord->id) }}" style="display:flex; gap:6px; align-items:center;">
+                @csrf
+                <select name="status" onchange="this.form.submit()" style="padding:6px 8px; background:#161616; border:1px solid var(--border); color:#fff; border-radius:6px; font-size:12px;">
+                  @foreach(['pending','paid','processing','shipped','delivered','cancelled'] as $s)
+                    <option value="{{ $s }}" {{ $ord->status === $s ? 'selected' : '' }}>{{ ucfirst($s) }}</option>
+                  @endforeach
+                </select>
+              </form>
+            </td>
+            <td data-label="Placed" style="color: var(--wa-muted);">{{ $ord->created_at->format('M d, Y') }}</td>
+            <td data-label="Actions">
+              <a href="{{ route('orders.show', $ord->id) }}" class="btn small-btn" style="font-size:11px; text-decoration:none;">View</a>
+            </td>
+          </tr>
+          @empty
+          <tr><td colspan="9" style="text-align:center; padding:40px;">No orders found.</td></tr>
+          @endforelse
+        </tbody>
+      </table>
     </div>
-  @endif
 
-  <!-- Add/Edit Modal -->
-  <div class="modal" id="ordersModal">
-    <div class="modal-content">
-      <h3 id="modalTitle">Add orders</h3>
-      <form id="ordersForm" method="POST">
-        @csrf
-        <input type="hidden" name="_method" id="formMethod" value="POST">
-        <input type="text" name="name" id="ordersName" placeholder="Enter orders name" required>
-        <div class="modal-actions">
-          <button type="submit" class="btn save-btn">Save</button>
-          <button type="button" class="btn cancel-btn" id="closeModal">Cancel</button>
-        </div>
-      </form>
+    <div class="pagination-container">
+      {{ $orders->links('pagination::bootstrap-5') }}
     </div>
-  </div>
-
-  <!-- Delete Confirmation Modal -->
-  <div class="modal" id="deleteModal">
-    <div class="modal-content">
-      <h3>Delete orders?</h3>
-      <p>Are you sure you want to delete this orders? This action cannot be undone.</p>
-      <form id="deleteForm" method="get">
-        @csrf
-        <div class="modal-actions">
-          <button type="submit" class="btn delete">Yes, Delete</button>
-          <button type="button" class="btn cancel-btn" id="cancelDelete">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- orders Table -->
-<div class="orders-table-wrapper">
-  <div class="orders-table">
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>User Id</th>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Address</th>
-          <th>City</th>
-          <th>Country</th>
-          <th>Phone</th> 
-          <th>Sub Total</th>
-          <th>Discount</th>
-          <th>Shipping Charges</th>
-          <th>Total</th>   
-          <th>Payment Method</th>
-          <th>Status</th>
-          <th>Created</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse($orders as $ord)
-        <tr>
-          <td data-label="ID">{{ $ord->id }}</td>
-          <td data-label="USER">{{ $ord->user_id }}</td>
-          <td data-label="EMAIL">{{ $ord->email }}</td>
-          <td data-label="FIRSTNAME">{{ $ord->first_name }}</td>
-          <td data-label="LASTNAME">{{ $ord->last_name }}</td>
-          <td data-label="ADDRESS">{{ $ord->address }}</td>
-          <td data-label="CITY">{{ $ord->city }}</td>
-          <td data-label="COUNTRY">{{ $ord->country }}</td>
-          <td data-label="PHONE">{{ $ord->phone }}</td>
-          <td data-label="SUBTOTAL">{{ $ord->subtotal }}</td>
-          <td data-label="DISCOUNT">{{ $ord->discount }}</td>
-          <td data-label="SHIPPING">{{ $ord->shipping }}</td>
-          <td data-label="TOTAL">{{ $ord->total }}</td>
-          <td data-label="PAYMENTMETHOD">{{ $ord->payment_method }}</td>
-          <td data-label="STATUS">{{ $ord->status }}</td>
-          <td data-label="Created">{{ $ord->created_at->format('Y-m-d') }}</td>
-          
-          {{-- <td data-label="Actions">
-            <button 
-              type="button" 
-              class="btn small-btn edit editBtn"
-              data-id="{{ $ord->id }}"
-              data-name="{{ $ord->name }}"
-              data-url="{{ route('categories.update', $ord->id) }}">
-              Edit
-            </button>
-
-            <button 
-              type="button" 
-              class="btn small-btn delete deleteBtn"
-              data-url="{{ route('categories.destroy', $ord->id) }}">
-              Delete
-            </button>
-          </td> --}}
-        </tr>
-        @empty
-        <tr><td colspan="4" style="text-align:center;">No ORDERS found.</td></tr>
-        @endforelse
-      </tbody>
-    </table>
-  </div>
-
-  <!-- ✅ Pagination Links -->
-  <div class="pagination-container">
-    {{ $orders->links('pagination::bootstrap-5') }}
   </div>
 </div>
 
-@endsection
-
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById('ordersModal');
-  const deleteModal = document.getElementById('deleteModal');
-  const openBtn = document.getElementById('addordersBtn');
-  const closeBtn = document.getElementById('closeModal');
-  const cancelDelete = document.getElementById('cancelDelete');
-  const form = document.getElementById('ordersForm');
-  const deleteForm = document.getElementById('deleteForm');
-  const modalTitle = document.getElementById('modalTitle');
-  const formMethod = document.getElementById('formMethod');
-  const ordersName = document.getElementById('ordersName');
+document.addEventListener('DOMContentLoaded', () => {
   const flashMsg = document.getElementById('flashMessage');
-
-  if (flashMsg) {
-    setTimeout(() => flashMsg.style.display = 'none', 3500);
-  }
-
-//     openBtn.addEventListener('click', () => {
-//     modal.classList.add('show');
-//     form.action = "{{ route('categories.store') }}";
-//     formMethod.value = "POST";
-//     modalTitle.textContent = "Add New orders";
-//     ordersName.value = "";
-//   });
-
-//   document.querySelectorAll('.editBtn').forEach(btn => {
-//     btn.addEventListener('click', () => {
-//       modal.classList.add('show');
-//       modalTitle.textContent = "Edit orders";
-//       form.action = btn.dataset.url;
-//       formMethod.value = "PUT";
-//       ordersName.value = btn.dataset.name;
-//     });
-//   });
-
-//   document.querySelectorAll('.deleteBtn').forEach(btn => {
-//     btn.addEventListener('click', () => {
-//       deleteModal.classList.add('show');
-//       deleteForm.action = btn.dataset.url;
-//     });
-//   });
-  if (document.getElementById('validationErrors')) {
-  setTimeout(() => document.getElementById('validationErrors').style.display = 'none', 5000);
-}
-
-  closeBtn.addEventListener('click', () => modal.classList.remove('show'));
-  cancelDelete.addEventListener('click', () => deleteModal.classList.remove('show'));
-  window.addEventListener('click', (e) => {
-    if (e.target === modal) modal.classList.remove('show');
-    if (e.target === deleteModal) deleteModal.classList.remove('show');
-  });
+  if (flashMsg) setTimeout(() => flashMsg.style.display = 'none', 3500);
 });
 </script>
-
+@endsection

@@ -573,7 +573,13 @@
                 @endphp
             <div class="product-card" data-aos="fade-up" data-aos-delay="{{ $loop->index % 8 * 50 }}">
                 <div class="p-img-box">
-                    <span class="badge-luxury">NEW</span>
+                    @if($item->stock <= 0)
+                        <span class="badge-luxury" style="background:#2a2a2a; color:#888;">Sold Out</span>
+                    @elseif($item->stock <= 5)
+                        <span class="badge-luxury" style="background:#f59e0b; color:#000;">Only {{ $item->stock }} Left</span>
+                    @else
+                        <span class="badge-luxury">NEW</span>
+                    @endif
                     <div class="p-actions">
                         <div class="p-btn" onclick="toggleWishlist({{ $item->id }}, this)" style="color: {{ $isWishlisted ? 'red' : 'inherit' }};">
                             <i class="{{ $isWishlisted ? 'fa-solid fas' : 'fa-regular far' }} fa-heart"></i>
@@ -610,10 +616,14 @@
             <span class="newsletter-tag">Inner Circle</span>
             <h2>Join the Wasaaz Family</h2>
             <p>Be the first to know about new drops, limited editions, and exclusive member-only releases.</p>
-            <form class="newsletter-form" onsubmit="event.preventDefault();">
-                <input type="email" placeholder="Your email address" required>
+            <form class="newsletter-form" action="{{ route('newsletter.subscribe') }}" method="POST">
+                @csrf
+                <input type="email" name="email" placeholder="Your email address" required>
                 <button type="submit">Subscribe</button>
             </form>
+            @if(session('newsletter_success'))
+                <p style="margin-top:16px; color:#34d399; font-size:13px; font-weight:600;"><i class="fas fa-check-circle"></i> {{ session('newsletter_success') }}</p>
+            @endif
         </div>
     </div>
 </section>

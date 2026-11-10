@@ -12,8 +12,8 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
                     <h5>Total Revenue</h5>
-                    <h2>Rs. 2,450,000</h2>
-                    <p class="up"><i class="bi bi-arrow-up"></i> +12% since last month</p>
+                    <h2>Rs. {{ number_format($totalRevenue) }}</h2>
+                    <p class="up"><i class="bi bi-arrow-up"></i> All-time sales</p>
                 </div>
                 <div class="stat-icon"><i class="bi bi-currency-dollar"></i></div>
             </div>
@@ -23,8 +23,8 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
                     <h5>Total Orders</h5>
-                    <h2>1,245</h2>
-                    <p class="up"><i class="bi bi-arrow-up"></i> +5% from yesterday</p>
+                    <h2>{{ number_format($totalOrders) }}</h2>
+                    <p class="muted">{{ $pendingOrders }} pending</p>
                 </div>
                 <div class="stat-icon"><i class="bi bi-bag-check"></i></div>
             </div>
@@ -33,9 +33,9 @@
         <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    <h5>New Customers</h5>
-                    <h2>387</h2>
-                    <p class="muted">Active users right now</p>
+                    <h5>Customers</h5>
+                    <h2>{{ number_format($totalCustomers) }}</h2>
+                    <p class="muted">{{ $unreadMessages }} unread messages</p>
                 </div>
                 <div class="stat-icon"><i class="bi bi-people"></i></div>
             </div>
@@ -45,8 +45,8 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
                     <h5>Active Products</h5>
-                    <h2>126</h2>
-                    <p class="down"><i class="bi bi-exclamation-triangle"></i> 3 items out of stock</p>
+                    <h2>{{ number_format($totalProducts) }}</h2>
+                    <p class="down"><i class="bi bi-exclamation-triangle"></i> {{ $lowStock }} items low stock</p>
                 </div>
                 <div class="stat-icon"><i class="bi bi-box-seam"></i></div>
             </div>
@@ -56,11 +56,11 @@
     <!-- Charts -->
     <div class="charts-grid" data-aos="fade-up">
         <div class="chart-card">
-            <h3>Sales Performance</h3>
+            <h3>Revenue — Last 7 Days</h3>
             <canvas id="salesChart" style="max-height: 300px;"></canvas>
         </div>
         <div class="chart-card">
-            <h3>Top Selling</h3>
+            <h3>Products by Category</h3>
             <canvas id="categoryChart" style="max-height: 300px;"></canvas>
         </div>
     </div>
@@ -83,27 +83,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse($recentOrders as $ord)
+                    @php
+                        $badgeMap = [
+                            'pending' => 'badge-warning', 'paid' => 'badge-success',
+                            'processing' => 'badge-info', 'shipped' => 'badge-info',
+                            'delivered' => 'badge-success', 'completed' => 'badge-success',
+                            'cancelled' => 'badge-danger',
+                        ];
+                    @endphp
                     <tr>
-                        <td style="font-weight: 700;">#ORD-9021</td>
-                        <td>Zeeshan Khan</td>
-                        <td style="color: var(--wa-muted);">2 mins ago</td>
-                        <td><span class="badge badge-success">Completed</span></td>
-                        <td style="font-weight: 800;">Rs. 12,000</td>
+                        <td style="font-weight: 700;"><a href="{{ route('orders.show', $ord->id) }}" style="color: var(--wa-gold);">#{{ $ord->id }}</a></td>
+                        <td>{{ $ord->first_name }} {{ $ord->last_name }}</td>
+                        <td style="color: var(--wa-muted);">{{ $ord->created_at->diffForHumans() }}</td>
+                        <td><span class="badge {{ $badgeMap[$ord->status] ?? 'badge-info' }}">{{ ucfirst($ord->status) }}</span></td>
+                        <td style="font-weight: 800;">Rs. {{ number_format($ord->total) }}</td>
                     </tr>
-                    <tr>
-                        <td style="font-weight: 700;">#ORD-9022</td>
-                        <td>Sameer Ahmed</td>
-                        <td style="color: var(--wa-muted);">1 hour ago</td>
-                        <td><span class="badge badge-warning">Pending</span></td>
-                        <td style="font-weight: 800;">Rs. 45,000</td>
-                    </tr>
-                    <tr>
-                        <td style="font-weight: 700;">#ORD-9023</td>
-                        <td>Bilal Hassan</td>
-                        <td style="color: var(--wa-muted);">3 hours ago</td>
-                        <td><span class="badge badge-info">Processing</span></td>
-                        <td style="font-weight: 800;">Rs. 28,500</td>
-                    </tr>
+                    @empty
+                    <tr><td colspan="5" style="text-align:center; padding:30px; color: var(--wa-muted);">No orders yet.</td></tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -117,13 +115,13 @@
   Chart.defaults.color = '#888888';
   Chart.defaults.borderColor = '#1f1f1f';
 
-  const salesChart = new Chart(document.getElementById('salesChart'), {
+  new Chart(document.getElementById('salesChart'), {
     type: 'line',
     data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      labels: {!! json_encode($chartLabels) !!},
       datasets: [{
         label: 'Revenue',
-        data: [2100, 1800, 3200, 2800, 4500, 3900, 5200],
+        data: {!! json_encode($chartValues) !!},
         borderColor: '#c9a86c',
         borderWidth: 3,
         pointBackgroundColor: '#c9a86c',
@@ -145,13 +143,13 @@
     }
   });
 
-  const categoryChart = new Chart(document.getElementById('categoryChart'), {
+  new Chart(document.getElementById('categoryChart'), {
     type: 'doughnut',
     data: {
-      labels: ['Hoodies', 'Polo', 'Trousers'],
+      labels: {!! json_encode($categoryData->pluck('name')) !!},
       datasets: [{
-        data: [55, 30, 15],
-        backgroundColor: ['#c9a86c', '#7a1f2a', '#4f46e5'],
+        data: {!! json_encode($categoryData->pluck('total')) !!},
+        backgroundColor: ['#c9a86c', '#7a1f2a', '#4f46e5', '#34d399', '#f59e0b'],
         borderWidth: 0,
         cutout: '70%'
       }]

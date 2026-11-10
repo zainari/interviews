@@ -57,6 +57,6 @@
     <hr>
 
     <div class="footer-bottom">
-        <p>© {{ date('Y') }} Zain Store — All Rights Reserved.</p>
+        <p>© {{ date('Y') }} Wasaaz — All Rights Reserved.</p>
     </div>
 </footer>

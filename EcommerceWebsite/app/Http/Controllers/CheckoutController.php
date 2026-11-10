@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderConfirmation;
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -137,6 +140,16 @@ class CheckoutController extends Controller
     private function createOrder($cart, $request, $payment_method)
     {
         $subtotal = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+        $shipping = $subtotal >= 5000 ? 0 : 250;
+
+        // Coupon discount from session
+        $discount = 0;
+        if (session('coupon')) {
+            $coupon = Coupon::where('code', session('coupon'))->where('is_active', true)->first();
+            if ($coupon) {
+                $discount = $coupon->discountFor($subtotal);
+            }
+        }
 
         $order = Order::create([
             'user_id'        => Auth::id(),
@@ -149,8 +162,9 @@ class CheckoutController extends Controller
             'email'          => $request->email,
             'phone'          => $request->phone,
             'subtotal'       => $subtotal,
-            'total'          => $subtotal,
-            'shipping'       => 0,
+            'discount'       => $discount,
+            'total'          => $subtotal + $shipping - $discount,
+            'shipping'       => $shipping,
             'payment_method' => $payment_method,
         ]);
 
@@ -161,6 +175,14 @@ class CheckoutController extends Controller
             ]);
 
             Product::find($item['id'])?->decrement('stock', $item['quantity']);
+        }
+
+        session()->forget('coupon');
+
+        try {
+            Mail::to($order->email)->send(new OrderConfirmation($order));
+        } catch (\Throwable $e) {
+            report($e);
         }
 
         return $order;

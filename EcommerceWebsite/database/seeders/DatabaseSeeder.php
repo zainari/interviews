@@ -19,5 +19,16 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        $this->call(ProductSeeder::class);
+
+        \App\Models\Coupon::firstOrCreate(
+            ['code' => 'WASA10'],
+            ['type' => 'percent', 'value' => 10, 'min_order' => 0, 'is_active' => true]
+        );
+        \App\Models\Coupon::firstOrCreate(
+            ['code' => 'WELCOME500'],
+            ['type' => 'fixed', 'value' => 500, 'min_order' => 3000, 'is_active' => true]
+        );
     }
 }

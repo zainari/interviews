@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AttributeController;
@@ -9,6 +11,7 @@ use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Middleware\CheckLogin;
@@ -47,6 +50,16 @@ Route::get('/product', function () {
 Route::get('home-old', [HomeController::class, 'index'])->name('home');
 Route::get('/', [HomeController::class, 'homenew'])->name('home.new');
 Route::get('/shopall', [HomeController::class, 'shopall'])->name('shop.all');
+Route::get('contact',[HomeController::class,'contactform'])->name('contact.form');
+Route::post('contact',[HomeController::class,'contactSubmit'])->name('contact.submit');
+Route::post('subscribe',[HomeController::class,'subscribe'])->name('newsletter.subscribe');
+Route::get('/track-order', [HomeController::class, 'trackForm'])->name('track.form');
+Route::post('/track-order', [HomeController::class, 'trackOrder'])->name('track.submit');
+Route::get('/pages/{slug}', [HomeController::class, 'staticPage'])->name('page.static');
+Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('coupon.apply');
+Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('coupon.remove');
+Route::post('/products/{product}/reviews', [ReviewController::class, 'store'])->name('reviews.store')->middleware('auth');
+Route::get('/account', [AccountController::class, 'index'])->name('account')->middleware('auth');
 Route::get('/products/{product}', [ProductController::class, 'shopingcart'])->name('product.show');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 
@@ -63,9 +76,23 @@ Route::get('/cart/data', [CartController::class, 'getCartData']);
 
 Route::middleware([CheckLogin::class])->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('admin/dashboard');
-    });
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+
+    Route::get('orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+
+    Route::get('messages', [AdminController::class, 'messages'])->name('admin.messages');
+    Route::post('messages/{id}/toggle-read', [AdminController::class, 'markMessageRead'])->name('admin.messages.read');
+    Route::delete('messages/{id}', [AdminController::class, 'deleteMessage'])->name('admin.messages.delete');
+
+    Route::get('customers', [AdminController::class, 'customers'])->name('admin.customers');
+    Route::get('subscribers', [AdminController::class, 'subscribers'])->name('admin.subscribers');
+    Route::delete('subscribers/{id}', [AdminController::class, 'deleteSubscriber'])->name('admin.subscribers.delete');
+
+    Route::get('coupons', [AdminController::class, 'coupons'])->name('admin.coupons');
+    Route::post('coupons', [AdminController::class, 'storeCoupon'])->name('admin.coupons.store');
+    Route::post('coupons/{id}/toggle', [AdminController::class, 'toggleCoupon'])->name('admin.coupons.toggle');
+    Route::delete('coupons/{id}', [AdminController::class, 'deleteCoupon'])->name('admin.coupons.delete');
 
     Route::get('/setting', function () {
         return view('admin/product');

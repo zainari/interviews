@@ -124,7 +124,7 @@
         width: 100%;
         padding: 14px 16px;
         border: 1px solid var(--border);
-        background: var(--white);
+        background: var(--light);
         color: var(--primary);
         font-size: 14px;
         font-weight: 500;
@@ -134,8 +134,8 @@
 
     .form-group input:focus,
     .form-group select:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.04);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(201, 168, 108, 0.12);
     }
 
     .form-group input::placeholder {
@@ -178,7 +178,7 @@
     }
 
     .btn-checkout:hover {
-        background: var(--primary-dark);
+        background: var(--accent);
     }
 
     .summary-card {
@@ -278,8 +278,8 @@
     .savings-note {
         margin-top: 18px;
         padding: 12px;
-        background: #f0f7f0;
-        color: #2e7d32;
+        background: rgba(16, 185, 129, 0.1);
+        color: #34d399;
         font-size: 13px;
         font-weight: 600;
         text-align: center;
@@ -292,7 +292,7 @@
 
     .empty-cart i {
         font-size: 48px;
-        color: var(--border);
+        color: var(--secondary);
         margin-bottom: 20px;
     }
 
@@ -321,7 +321,7 @@
     }
 
     .btn-continue:hover {
-        background: var(--primary-dark);
+        background: var(--accent);
     }
 
     @media (max-width: 1100px) {
@@ -482,6 +482,22 @@
                             @endforeach
                         </div>
 
+                        <!-- Coupon -->
+                        <div class="coupon-box">
+                            @if($coupon)
+                                <div class="coupon-applied">
+                                    <span><i class="fas fa-ticket-alt"></i> {{ $coupon->code }} applied</span>
+                                    <button type="button" id="removeCouponBtn">Remove</button>
+                                </div>
+                            @else
+                                <div class="coupon-row">
+                                    <input type="text" id="couponInput" placeholder="Promo code" style="text-transform:uppercase;">
+                                    <button type="button" id="applyCouponBtn">Apply</button>
+                                </div>
+                                <div id="couponMsg" class="coupon-msg"></div>
+                            @endif
+                        </div>
+
                         <div class="summary-lines">
                             <div class="summary-line">
                                 <span>Subtotal</span>
@@ -522,5 +538,67 @@
 
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const applyBtn = document.getElementById('applyCouponBtn');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', async () => {
+            const input = document.getElementById('couponInput');
+            const msg = document.getElementById('couponMsg');
+            const code = input.value.trim();
+            if (!code) { msg.textContent = 'Enter a code first.'; msg.className = 'coupon-msg err'; return; }
+
+            applyBtn.disabled = true;
+            applyBtn.textContent = '...';
+            try {
+                const res = await fetch("{{ route('coupon.apply') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    window.location.reload();
+                } else {
+                    msg.textContent = data.message || 'Invalid code.';
+                    msg.className = 'coupon-msg err';
+                }
+            } catch (e) {
+                msg.textContent = 'Something went wrong.';
+                msg.className = 'coupon-msg err';
+            }
+            applyBtn.disabled = false;
+            applyBtn.textContent = 'Apply';
+        });
+    }
+
+    const removeBtn = document.getElementById('removeCouponBtn');
+    if (removeBtn) {
+        removeBtn.addEventListener('click', async () => {
+            await fetch("{{ route('coupon.remove') }}", {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
+            });
+            window.location.reload();
+        });
+    }
+});
+</script>
+
+<style>
+.coupon-box { padding: 14px 0 0; border-top: 1px solid var(--border, #1f1f1f); }
+.coupon-row { display: flex; gap: 10px; }
+.coupon-row input { flex: 1; padding: 12px 14px; background: transparent; border: 1px solid var(--border, #1f1f1f); color: #fff; font-size: 13px; letter-spacing: 1px; font-family: inherit; }
+.coupon-row input:focus { border-color: #c9a86c; outline: none; }
+.coupon-row button { padding: 12px 20px; background: #c9a86c; color: #000; border: none; font-weight: 800; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
+.coupon-row button:disabled { opacity: .6; }
+.coupon-msg { font-size: 12px; margin-top: 8px; color: #34d399; }
+.coupon-msg.err { color: #ef4444; }
+.coupon-applied { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: rgba(201,168,108,.1); border: 1px dashed #c9a86c; font-size: 13px; font-weight: 700; color: #c9a86c; }
+.coupon-applied button { background: none; border: none; color: #ef4444; font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+</style>
 
 @endsection

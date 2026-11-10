@@ -1,6 +1,6 @@
 @extends('layout_frontent.app')
 
-@section('title', 'Home | Zain Store')
+@section('title', 'Home | Wasaaz')
 
 @section('content')
 

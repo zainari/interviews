@@ -17,18 +17,18 @@
     
     <style>
         :root {
-            --primary: #111111;
-            --primary-dark: #000000;
-            --secondary: #555555;
-            --muted: #8c8c8c;
-            --light: #faf9f6; /* Off-white warm background */
-            --white: #ffffff;
-            --accent: #8c8276; /* Sophisticated muted gold/taupe */
-            --danger: #b22222;
-            --border: #e8e6e1;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.02);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.04);
-            --shadow-lg: 0 20px 40px rgba(140, 130, 118, 0.08);
+            --primary: #ffffff;
+            --primary-dark: #ffffff;
+            --secondary: #888888;
+            --muted: #666666;
+            --light: #0a0a0a; /* Deep dark background */
+            --white: #111111; /* Dark card/surface */
+            --accent: #c9a86c; /* Wasaaz muted gold */
+            --danger: #ef4444;
+            --border: #1f1f1f;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.5);
             --transition-smooth: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
@@ -47,8 +47,8 @@
 
         /* --- Announcement Top Bar --- */
         .top-header { 
-            background: var(--primary); 
-            color: var(--white); 
+            background: #050505; 
+            color: var(--accent); 
             padding: 12px 0; 
             font-size: 11px; 
             text-align: center; 
@@ -108,7 +108,7 @@
         }
         .search-bar form:focus-within {
             background: var(--white);
-            border-color: var(--primary);
+            border-color: var(--accent);
             box-shadow: var(--shadow-sm);
         }
         .search-bar input { 
@@ -376,15 +376,15 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0,0,0,0.3); 
-            backdrop-filter: blur(2px);
+            background: rgba(0,0,0,0.65); 
+            backdrop-filter: blur(3px);
             z-index: 1999; 
             display: none; 
         }
         .drawer-overlay.active { display: block; }
         .drawer-search { margin-bottom: 24px; }
         .drawer-search form { display: flex; background: var(--light); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: var(--transition-smooth); }
-        .drawer-search form:focus-within { background: var(--white); border-color: var(--primary); }
+        .drawer-search form:focus-within { background: var(--white); border-color: var(--accent); }
         .drawer-search input { flex: 1; border: none; background: transparent; padding: 12px 15px; outline: none; font-size: 13px; color: var(--primary); }
         .drawer-search button { border: none; background: var(--primary); color: var(--white); padding: 0 16px; cursor: pointer; transition: var(--transition-smooth); }
         .drawer-search button:hover { background: var(--accent); }
@@ -434,7 +434,7 @@
         /* --- Mobile Search Bar --- */
         .mobile-search-bar { display: none; background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 0; }
         .mobile-search-bar form { display: flex; background: var(--light); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: var(--transition-smooth); }
-        .mobile-search-bar form:focus-within { background: var(--white); border-color: var(--primary); }
+        .mobile-search-bar form:focus-within { background: var(--white); border-color: var(--accent); }
         .mobile-search-bar input { flex: 1; border: none; background: transparent; padding: 12px 15px; outline: none; font-size: 13px; color: var(--primary); }
         .mobile-search-bar button { border: none; background: var(--primary); color: var(--white); padding: 0 18px; cursor: pointer; transition: var(--transition-smooth); }
         .mobile-search-bar button:hover { background: var(--accent); }
@@ -442,6 +442,8 @@
     </style>
 </head>
 <body>
+
+    @php $navCategories = \App\Models\Category::has('products')->inRandomOrder()->take(6)->get(); @endphp
 
     <!-- 1. Announcement Bar -->
     <div class="top-header">
@@ -463,11 +465,12 @@
         </div>
         <ul class="mobile-menu">
             <li><a href="{{route('shop.all')}}">SHOP ALL</a></li>
-            <li><a href="#">ELECTRONICS</a></li>
-            <li><a href="#">FASHION</a></li>
-            <li><a href="#">HOME & GARDEN</a></li>
-            <li><a href="#">BEAUTY & HEALTH</a></li>
-            <li><a href="#" style="color:var(--danger)">NEW DROP</a></li>
+            @foreach($navCategories as $navCat)
+                <li><a href="{{ route('shop.all', ['categories' => [$navCat->id]]) }}">{{ strtoupper(Str::limit($navCat->name, 20)) }}</a></li>
+            @endforeach
+            <li><a href="{{ url('/aboutpage') }}">ABOUT US</a></li>
+            <li><a href="{{route('contact.form')}}">CONTACT US</a></li>
+            <li><a href="{{ route('shop.all', ['sort' => 'latest']) }}" style="color:var(--danger)">NEW DROP</a></li>
         </ul>
         <div class="drawer-footer">
             <p>Premium curated fashion, tech and lifestyle products delivered to your door.</p>
@@ -501,7 +504,7 @@
 
                 <!-- Icons Navigation -->
                 <div class="nav-actions">
-                    <div class="icon-box"><i class="far fa-user"></i></div>
+                    <a href="{{ auth()->check() ? route('account') : route('user.loginpage') }}" class="icon-box" title="{{ auth()->check() ? 'My Account' : 'Sign In' }}"><i class="far fa-user"></i></a>
 
                     <!-- Wishlist -->
                     <a href="{{ route('wishlist.index') }}" class="icon-box" title="My Wishlist">
@@ -536,12 +539,11 @@
         <div class="container">
             <ul class="nav-menu">
                 <li><a href="{{route('shop.all')}}">SHOP ALL</a></li>
-                <li><a href="#">ELECTRONICS</a></li>
-                <li><a href="#">FASHION</a></li>
-                <li><a href="#">HOME & GARDEN</a></li>
-                <li><a href="#">BEAUTY & HEALTH</a></li>
-                <li><a href="#">FLASH DEALS</a></li>
-                <li style="color: var(--danger);"><a href="#">NEW DROP</a></li>
+                @foreach($navCategories as $navCat)
+                    <li><a href="{{ route('shop.all', ['categories' => [$navCat->id]]) }}">{{ strtoupper(Str::limit($navCat->name, 18)) }}</a></li>
+                @endforeach
+                <li><a href="{{route('contact.form')}}">CONTACT</a></li>
+                <li><a href="{{ route('shop.all', ['sort' => 'latest']) }}" style="color: var(--danger);">NEW DROP</a></li>
             </ul>
         </div>
     </nav>
@@ -568,21 +570,21 @@
                 <div class="footer-col">
                     <h4>Shop Categories</h4>
                     <ul>
-                        <li><a href="#">Men's Fashion</a></li>
-                        <li><a href="#">Women's Clothing</a></li>
-                        <li><a href="#">Consumer Tech</a></li>
-                        <li><a href="#">Home Essentials</a></li>
-                        <li><a href="#">Luxury Watches</a></li>
+                        <li><a href="{{ route('shop.all') }}">Shop All</a></li>
+                        @foreach($navCategories->take(5) as $navCat)
+                            <li><a href="{{ route('shop.all', ['categories' => [$navCat->id]]) }}">{{ $navCat->name }}</a></li>
+                        @endforeach
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4>Customer Care</h4>
                     <ul>
-                        <li><a href="#">Track My Order</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Returns & Refunds</a></li>
-                        <li><a href="#">Shipping Rates</a></li>
-                        <li><a href="#">Contact Support</a></li>
+                        <li><a href="{{ route('track.form') }}">Track My Order</a></li>
+                        <li><a href="{{ route('page.static', 'faq') }}">FAQ</a></li>
+                        <li><a href="{{ route('page.static', 'shipping') }}">Shipping Rates</a></li>
+                        <li><a href="{{ route('page.static', 'returns') }}">Returns & Refunds</a></li>
+                        <li><a href="{{ route('page.static', 'privacy-policy') }}">Privacy Policy</a></li>
+                        <li><a href="{{ route('contact.form') }}">Contact Support</a></li>
                     </ul>
                 </div>
                 <div class="footer-col footer-contact">

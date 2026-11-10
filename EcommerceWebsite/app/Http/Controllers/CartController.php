@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -120,22 +121,66 @@ class CartController extends Controller
     
     public function checkoutform(Request $request) {
         $cart = session('cart', []);
-        
-        // Calculate total and discount
+
         $total = 0;
-        $discount = 0; // agar coupon/discount logic ho
-        if ($request->city == "Karachi") {
-            $shipping = 150;
-        } else {
-            $shipping = 300;
-        }
-        // $shipping = 200;
-        $grandTotal = $total + $shipping;
         foreach($cart as $item) {
             $total += $item['price'] * $item['quantity'];
         }
 
-        return view('layout_frontent.checkoutform', compact('cart','total','shipping','grandTotal','discount'));
+        // Free shipping over Rs. 5,000 (same rule as cart page)
+        $shipping = $total >= 5000 ? 0 : 250;
+
+        // Coupon discount from session
+        $discount = 0;
+        $coupon = null;
+        $couponCode = session('coupon');
+        if ($couponCode) {
+            $coupon = Coupon::where('code', $couponCode)->where('is_active', true)->first();
+            if ($coupon) {
+                $discount = $coupon->discountFor($total);
+            } else {
+                session()->forget('coupon');
+            }
+        }
+
+        $grandTotal = $total + $shipping - $discount;
+
+        return view('layout_frontent.checkoutform', compact('cart','total','shipping','grandTotal','discount','coupon'));
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        $request->validate(['code' => 'required|string|max:50']);
+
+        $coupon = Coupon::where('code', strtoupper(trim($request->code)))->where('is_active', true)->first();
+
+        if (!$coupon) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid or expired coupon code.'], 422);
+        }
+
+        $cart = session('cart', []);
+        $subtotal = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+
+        if ($subtotal < (float) $coupon->min_order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This coupon requires a minimum order of Rs. ' . number_format($coupon->min_order) . '.'
+            ], 422);
+        }
+
+        session()->put('coupon', $coupon->code);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Coupon "' . $coupon->code . '" applied!',
+            'discount' => $coupon->discountFor($subtotal),
+        ]);
+    }
+
+    public function removeCoupon()
+    {
+        session()->forget('coupon');
+        return response()->json(['status' => 'success', 'message' => 'Coupon removed.']);
     }
 
     public function success($orderId)

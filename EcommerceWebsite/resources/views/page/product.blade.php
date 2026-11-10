@@ -11,7 +11,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: var(--primary);
+        background: #0a0a0a;
+        background-image: radial-gradient(circle at 50% 40%, rgba(122,31,42,0.15), transparent 60%);
         text-align: center;
     }
     .product-hero .hero-inner {
@@ -22,7 +23,7 @@
     .product-hero h1 {
         font-family: 'Playfair Display', serif;
         font-size: clamp(36px, 6vw, 64px);
-        color: var(--white);
+        color: #ffffff;
         font-weight: 600;
         letter-spacing: 1px;
         margin-bottom: 14px;
@@ -74,7 +75,7 @@
     }
     .filter-search input:focus {
         background: var(--white);
-        border-color: var(--primary);
+        border-color: var(--accent);
     }
     .filter-search i {
         position: absolute;
@@ -92,7 +93,7 @@
         font-size: 13px;
         color: var(--primary);
         appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='%23555555'%3E%3Cpath d='M6 8L0 0h12L6 8z'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='%23c9a86c'%3E%3Cpath d='M6 8L0 0h12L6 8z'/%3E%3C/svg%3E");
         background-repeat: no-repeat;
         background-position: right 14px center;
         cursor: pointer;
@@ -100,7 +101,7 @@
     }
     .filter-right select:focus {
         outline: none;
-        border-color: var(--primary);
+        border-color: var(--accent);
     }
 
     .product-section {

@@ -9,12 +9,12 @@
 
 <style>
     :root {
-        --primary-neutral: #111111;
-        --secondary-neutral: #555555;
-        --accent-neutral: #8c8276;
-        --warm-bg: #faf9f6;
-        --white-bg: #ffffff;
-        --light-border: #e8e6e1;
+        --primary-neutral: #ffffff;
+        --secondary-neutral: #888888;
+        --accent-neutral: #c9a86c;
+        --warm-bg: #0a0a0a;
+        --white-bg: #111111;
+        --light-border: #1f1f1f;
         --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
@@ -34,16 +34,16 @@
 
     /* Stepper */
     .stepper { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 45px; flex-wrap: wrap; }
-    .step { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 11px; color: #ccc; text-transform: uppercase; letter-spacing: 1px; }
+    .step { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 11px; color: var(--secondary-neutral); text-transform: uppercase; letter-spacing: 1px; }
     .step.active { color: var(--primary-neutral); }
-    .step-num { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #ddd; display: grid; place-items: center; font-size: 11px; transition: var(--transition-smooth); }
+    .step-num { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--light-border); display: grid; place-items: center; font-size: 11px; transition: var(--transition-smooth); }
     .step.active .step-num { background: var(--primary-neutral); border-color: var(--primary-neutral); color: var(--white-bg); }
     .step-line { width: 50px; height: 1px; background: var(--light-border); }
 
     /* Free Shipping Goal */
     .shipping-goal-card { background: var(--white-bg); padding: 25px; border: 1px solid var(--light-border); margin-bottom: 30px; }
     .goal-text { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-    .goal-bar { height: 6px; background: #f0f0f0; border-radius: 10px; overflow: hidden; }
+    .goal-bar { height: 6px; background: #1f1f1f; border-radius: 10px; overflow: hidden; }
     .goal-fill { height: 100%; background: var(--accent-neutral); transition: 1s ease; }
 
     /* Cart Grid */
@@ -56,16 +56,16 @@
 
     .cart-item { display: grid; grid-template-columns: 120px 1fr 140px; gap: 25px; padding: 28px 0; border-bottom: 1px solid var(--light-border); align-items: center; }
     .cart-item:last-child { border-bottom: none; }
-    .p-img-box { width: 120px; aspect-ratio: 3/4; background: #fbfbfb; border: 1px solid var(--light-border); overflow: hidden; }
+    .p-img-box { width: 120px; aspect-ratio: 3/4; background: #161616; border: 1px solid var(--light-border); overflow: hidden; }
     .p-img-box img { width: 100%; height: 100%; object-fit: cover; }
     .p-info h3 { margin: 0 0 8px; font-size: 16px; font-weight: 600; color: var(--primary-neutral); }
     .p-info span { color: var(--secondary-neutral); font-size: 13px; }
     .p-info span strong { color: var(--primary-neutral); }
 
     .qty-box { display: flex; align-items: center; border: 1px solid var(--light-border); width: fit-content; margin-top: 15px; }
-    .qty-box button { width: 36px; height: 36px; border: none; background: var(--white-bg); cursor: pointer; font-size: 16px; color: var(--primary-neutral); transition: var(--transition-smooth); }
+    .qty-box button { width: 36px; height: 36px; border: none; background: #161616; cursor: pointer; font-size: 16px; color: var(--primary-neutral); transition: var(--transition-smooth); }
     .qty-box button:hover { background: var(--warm-bg); }
-    .qty-box input { width: 45px; text-align: center; border: none; font-weight: 800; outline: none; font-size: 14px; color: var(--primary-neutral); }
+    .qty-box input { width: 45px; text-align: center; border: none; background: transparent; font-weight: 800; outline: none; font-size: 14px; color: var(--primary-neutral); }
 
     .p-price-col { text-align: right; display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
     .p-price-col .price { font-size: 16px; font-weight: 700; color: var(--primary-neutral); margin-bottom: 8px; }
@@ -83,7 +83,7 @@
 
     /* Empty State */
     .empty-state { text-align: center; padding: 100px 20px; background: var(--white-bg); border: 1px solid var(--light-border); }
-    .empty-state i { font-size: 60px; color: var(--light-border); margin-bottom: 25px; }
+    .empty-state i { font-size: 60px; color: var(--secondary-neutral); margin-bottom: 25px; }
     .empty-state h2 { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: var(--primary-neutral); }
     .empty-state p { color: var(--secondary-neutral); margin-bottom: 30px; }
     .btn-shop { padding: 15px 40px; background: var(--primary-neutral); color: var(--white-bg); text-decoration: none; font-weight: 700; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: var(--transition-smooth); display: inline-block; border: 1px solid var(--primary-neutral); }
@@ -192,7 +192,7 @@
                         </div>
                         <div class="summary-row">
                             <span>Shipping</span>
-                            <span style="color: {{ $subtotal >= 5000 ? '#1a7d32' : 'inherit' }};">{{ $subtotal >= 5000 ? 'FREE' : 'Rs. 250' }}</span>
+                            <span style="color: {{ $subtotal >= 5000 ? '#34d399' : 'inherit' }};">{{ $subtotal >= 5000 ? 'FREE' : 'Rs. 250' }}</span>
                         </div>
                         <div class="summary-total">
                             <span>Total</span>

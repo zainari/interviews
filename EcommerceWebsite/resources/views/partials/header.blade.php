@@ -1,7 +1,7 @@
 <header class="navbar">
     <div class="nav-left">
-        <a href="{{ url('/') }}" class="logo">
-            <img src="{{ asset('img/zain07.png') }}" alt="Logo">
+        <a href="{{ url('/') }}" class="logo" style="font-family:'Playfair Display',serif; font-size:22px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:#111; text-decoration:none;">
+            WASA<span style="font-weight:400; color:#8c8276;">AZ</span>
         </a>
         <ul class="menu">
             <li><a href="{{route('home')}}">Home</a></li>

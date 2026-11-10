@@ -9,13 +9,13 @@
 
 <style>
     :root {
-        --primary-neutral: #111111;
-        --secondary-neutral: #555555;
-        --accent-neutral: #8c8276;
-        --warm-bg: #faf9f6;
-        --white-bg: #ffffff;
-        --light-border: #e8e6e1;
-        --danger: #b22222;
+        --primary-neutral: #ffffff;
+        --secondary-neutral: #888888;
+        --accent-neutral: #c9a86c;
+        --warm-bg: #0a0a0a;
+        --white-bg: #111111;
+        --light-border: #1f1f1f;
+        --danger: #ef4444;
         --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
@@ -33,12 +33,12 @@
 
     /* Thumbnails */
     .thumbnail-list { display: flex; flex-direction: column; gap: 14px; position: sticky; top: 120px; }
-    .thumb-item { width: 80px; aspect-ratio: 3/4; background: #fbfbfb; cursor: pointer; overflow: hidden; border: 1px solid var(--light-border); transition: var(--transition-smooth); }
+    .thumb-item { width: 80px; aspect-ratio: 3/4; background: #161616; cursor: pointer; overflow: hidden; border: 1px solid var(--light-border); transition: var(--transition-smooth); }
     .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
     .thumb-item.active, .thumb-item:hover { border-color: var(--primary-neutral); }
 
     /* Main Image */
-    .main-image-box { width: 100%; background: #fbfbfb; aspect-ratio: 3/4; overflow: hidden; position: relative; border: 1px solid var(--light-border); }
+    .main-image-box { width: 100%; background: #161616; aspect-ratio: 3/4; overflow: hidden; position: relative; border: 1px solid var(--light-border); }
     .main-image-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     .main-image-box:hover img { transform: scale(1.03); }
 
@@ -47,6 +47,11 @@
     .sale-tag { display: inline-block; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; padding: 5px 12px; border: 1px solid var(--primary-neutral); margin-bottom: 18px; }
     .p-title { font-size: 30px; font-weight: 300; text-transform: uppercase; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 12px; color: var(--primary-neutral); }
     .p-brand { font-size: 11px; color: var(--accent-neutral); margin-bottom: 22px; display: block; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+
+    .rating-row { display: flex; align-items: center; gap: 4px; margin-bottom: 20px; font-size: 13px; color: var(--secondary-neutral); }
+    .rating-row i { color: var(--accent-neutral); font-size: 13px; }
+    .rating-row i.dim { color: var(--light-border); }
+    .rating-row span { margin-left: 8px; font-size: 12px; letter-spacing: 0.5px; }
 
     .price-box { display: flex; align-items: baseline; gap: 15px; margin-bottom: 28px; }
     .new-price { font-size: 24px; font-weight: 700; color: var(--primary-neutral); }
@@ -67,8 +72,8 @@
     .size-btn { border: 1px solid var(--light-border); padding: 12px 26px; font-size: 12px; cursor: pointer; background: var(--white-bg); transition: var(--transition-smooth); font-weight: 700; position: relative; overflow: hidden; color: var(--primary-neutral); min-width: 48px; }
     .size-btn:hover:not(.out-of-stock) { border-color: var(--primary-neutral); }
     .size-btn.active { background: var(--primary-neutral); color: var(--white-bg); border-color: var(--primary-neutral); }
-    .size-btn.out-of-stock { color: #ccc; border: 1px dashed var(--light-border); cursor: not-allowed; opacity: 0.6; }
-    .size-btn.out-of-stock::after { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #ccc; transform: rotate(-15deg); }
+    .size-btn.out-of-stock { color: #555; border: 1px dashed var(--light-border); cursor: not-allowed; opacity: 0.6; }
+    .size-btn.out-of-stock::after { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #555; transform: rotate(-15deg); }
 
     #stock-message { font-size: 12px; font-weight: 700; margin-bottom: 28px; display: block; min-height: 18px; }
 
@@ -76,13 +81,13 @@
     .qty-box { display: flex; align-items: center; border: 1px solid var(--light-border); width: fit-content; margin-bottom: 22px; }
     .qty-box button { background: none; border: none; width: 45px; height: 45px; cursor: pointer; font-size: 18px; color: var(--primary-neutral); transition: var(--transition-smooth); }
     .qty-box button:hover { background: var(--warm-bg); }
-    .qty-box input { width: 50px; text-align: center; border: none; font-weight: 800; outline: none; font-size: 15px; color: var(--primary-neutral); }
+    .qty-box input { width: 50px; text-align: center; border: none; background: transparent; font-weight: 800; outline: none; font-size: 15px; color: var(--primary-neutral); }
 
     /* Action Buttons */
     .action-row { display: flex; gap: 12px; margin-bottom: 30px; }
     .btn-add-bag { flex: 1; padding: 18px; border: 1px solid var(--primary-neutral); background: var(--primary-neutral); color: var(--white-bg); font-weight: 700; text-transform: uppercase; font-size: 12px; cursor: pointer; transition: var(--transition-smooth); letter-spacing: 2px; }
     .btn-add-bag:hover { background: transparent; color: var(--primary-neutral); }
-    .btn-add-bag:disabled { background: #f1f1f1; color: #aaa; border-color: var(--light-border); cursor: not-allowed; }
+    .btn-add-bag:disabled { background: #1a1a1a; color: #555; border-color: var(--light-border); cursor: not-allowed; }
     .btn-wishlist { width: 58px; height: 58px; border: 1px solid var(--primary-neutral); background: transparent; color: var(--primary-neutral); display: grid; place-items: center; cursor: pointer; font-size: 18px; transition: var(--transition-smooth); }
     .btn-wishlist:hover { background: var(--primary-neutral); color: var(--white-bg); }
 
@@ -110,12 +115,46 @@
     .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
     .related-item { text-decoration: none; color: inherit; background: var(--white-bg); border: 1px solid var(--light-border); overflow: hidden; transition: var(--transition-smooth); display: block; }
     .related-item:hover { border-color: var(--primary-neutral); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.04); }
-    .rel-img { width: 100%; aspect-ratio: 3/4; background: #fbfbfb; overflow: hidden; }
+    .rel-img { width: 100%; aspect-ratio: 3/4; background: #161616; overflow: hidden; }
     .rel-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
     .related-item:hover .rel-img img { transform: scale(1.05); }
     .rel-info { padding: 18px; text-align: center; }
     .rel-name { font-size: 13px; font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 6px; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; color: var(--primary-neutral); }
     .rel-price { font-size: 14px; font-weight: 700; color: var(--primary-neutral); }
+
+    /* Reviews */
+    .reviews-section { padding: 80px 0 0; border-top: 1px solid var(--light-border); }
+    .reviews-header { text-align: center; margin-bottom: 45px; }
+    .reviews-header p { color: var(--accent-neutral); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; font-size: 11px; margin-bottom: 10px; }
+    .reviews-header h2 { font-size: 32px; font-weight: 300; text-transform: uppercase; letter-spacing: -0.5px; color: var(--primary-neutral); }
+    .reviews-header h2 span { font-weight: 700; }
+    .reviews-avg { margin-top: 12px; font-size: 14px; color: var(--secondary-neutral); display: flex; justify-content: center; align-items: center; gap: 4px; }
+    .reviews-avg i { color: var(--accent-neutral); }
+    .reviews-avg i.dim { color: var(--light-border); }
+    .reviews-avg span { margin-left: 8px; }
+    .reviews-grid { display: grid; grid-template-columns: 1fr 380px; gap: 30px; align-items: start; }
+    .reviews-list { display: flex; flex-direction: column; gap: 16px; max-height: 520px; overflow-y: auto; }
+    .review-card { background: var(--white-bg); border: 1px solid var(--light-border); padding: 22px; }
+    .review-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .review-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-neutral), #8a6a35); color: #000; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .review-top strong { display: block; font-size: 14px; color: var(--primary-neutral); }
+    .review-date { font-size: 11px; color: var(--secondary-neutral); }
+    .review-stars { margin-left: auto; }
+    .review-stars i { color: var(--accent-neutral); font-size: 12px; }
+    .review-stars i.dim { color: var(--light-border); }
+    .review-text { font-size: 14px; line-height: 1.7; color: var(--secondary-neutral); }
+    .review-empty { text-align: center; padding: 50px 20px; color: var(--secondary-neutral); background: var(--white-bg); border: 1px dashed var(--light-border); }
+    .review-form-card { background: var(--white-bg); border: 1px solid var(--light-border); padding: 28px; position: sticky; top: 120px; }
+    .review-form-card h4 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 18px; color: var(--primary-neutral); }
+    .review-form-card textarea { width: 100%; background: transparent; border: 1px solid var(--light-border); color: var(--primary-neutral); padding: 14px; font-size: 14px; font-family: inherit; margin-bottom: 16px; resize: vertical; }
+    .review-form-card textarea:focus { border-color: var(--accent-neutral); outline: none; }
+    .star-input { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 6px; margin-bottom: 16px; }
+    .star-input input { display: none; }
+    .star-input label { cursor: pointer; font-size: 22px; color: var(--light-border); transition: color .2s; }
+    .star-input input:checked ~ label, .star-input label:hover, .star-input label:hover ~ label { color: var(--accent-neutral); }
+    .review-success { background: rgba(52,211,153,.12); border: 1px solid #34d399; color: #34d399; padding: 12px 16px; font-size: 13px; margin-bottom: 16px; }
+    .review-err { color: var(--danger); font-size: 12px; display: block; margin: -10px 0 12px; }
+    .review-login-note p { color: var(--secondary-neutral); font-size: 14px; margin-bottom: 14px; }
 
     /* Responsive */
     @media (max-width: 1200px) {
@@ -127,6 +166,8 @@
         .main-image-box { order: 1; }
         .product-details { order: 3; padding-left: 0; }
         .related-grid { grid-template-columns: repeat(3, 1fr); }
+        .reviews-grid { grid-template-columns: 1fr; }
+        .review-form-card { position: static; }
     }
     @media (max-width: 768px) {
         .p-title { font-size: 24px; }
@@ -181,6 +222,17 @@
                 <span class="sale-tag">New Season</span>
                 <h1 class="p-title">{{ $product->name }}</h1>
                 <span class="p-brand">{{ $product->brand ?? 'WASA SELECT' }}</span>
+
+                @php
+                    $reviewCount = $product->reviews->count();
+                    $avgRating = $reviewCount ? round($product->reviews->avg('rating'), 1) : 0;
+                @endphp
+                <div class="rating-row" onclick="document.getElementById('reviews-section')?.scrollIntoView({behavior:'smooth'})" style="cursor:pointer;">
+                    @for($i = 1; $i <= 5; $i++)
+                        <i class="fas fa-star {{ $i <= round($avgRating) ? '' : 'dim' }}"></i>
+                    @endfor
+                    <span>{{ $reviewCount ? $avgRating . ' · ' . $reviewCount . ' review' . ($reviewCount > 1 ? 's' : '') : 'No reviews yet — be the first' }}</span>
+                </div>
 
                 <div class="price-box">
                     <span class="new-price">Rs. {{ number_format($product->price) }}</span>
@@ -263,6 +315,80 @@
             </div>
         </div>
 
+        <!-- Reviews Section -->
+        <section class="reviews-section" id="reviews-section">
+            <div class="reviews-header">
+                <p>Customer Feedback</p>
+                <h2>Reviews <span>({{ $reviewCount }})</span></h2>
+                @if($reviewCount)
+                    <div class="reviews-avg">
+                        @for($i = 1; $i <= 5; $i++)
+                            <i class="fas fa-star {{ $i <= round($avgRating) ? '' : 'dim' }}"></i>
+                        @endfor
+                        <span>{{ $avgRating }} out of 5</span>
+                    </div>
+                @endif
+            </div>
+
+            <div class="reviews-grid">
+                <!-- Review list -->
+                <div class="reviews-list">
+                    @forelse($product->reviews->sortByDesc('created_at') as $review)
+                        <div class="review-card">
+                            <div class="review-top">
+                                <div class="review-avatar">{{ strtoupper(substr($review->user->name ?? 'U', 0, 1)) }}</div>
+                                <div>
+                                    <strong>{{ $review->user->name ?? 'Customer' }}</strong>
+                                    <span class="review-date">{{ $review->created_at->format('M d, Y') }}</span>
+                                </div>
+                                <div class="review-stars">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <i class="fas fa-star {{ $i <= $review->rating ? '' : 'dim' }}"></i>
+                                    @endfor
+                                </div>
+                            </div>
+                            @if($review->comment)
+                                <p class="review-text">{{ $review->comment }}</p>
+                            @endif
+                        </div>
+                    @empty
+                        <div class="review-empty">
+                            <i class="far fa-comment-dots" style="font-size:36px; opacity:.3; display:block; margin-bottom:14px;"></i>
+                            <p>No reviews yet. Share your experience with this product.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                <!-- Review form -->
+                <div class="review-form-card">
+                    <h4>Write a Review</h4>
+                    @if(session('review_success'))
+                        <div class="review-success">{{ session('review_success') }}</div>
+                    @endif
+                    @auth
+                        <form method="POST" action="{{ route('reviews.store', $product->slug) }}">
+                            @csrf
+                            <div class="star-input">
+                                @for($i = 5; $i >= 1; $i--)
+                                    <input type="radio" name="rating" value="{{ $i }}" id="star{{ $i }}" {{ old('rating') == $i ? 'checked' : '' }} required>
+                                    <label for="star{{ $i }}"><i class="fas fa-star"></i></label>
+                                @endfor
+                            </div>
+                            @error('rating')<span class="review-err">{{ $message }}</span>@enderror
+                            <textarea name="comment" rows="4" placeholder="How was the fit, quality, delivery?">{{ old('comment') }}</textarea>
+                            @error('comment')<span class="review-err">{{ $message }}</span>@enderror
+                            <button type="submit" class="btn-add-bag" style="width:100%;">Submit Review</button>
+                        </form>
+                    @else
+                        <div class="review-login-note">
+                            <p>Please login to write a review.</p>
+                            <a href="{{ route('user.loginpage') }}" class="btn-add-bag" style="display:block; text-align:center; text-decoration:none; line-height:58px; padding:0;">Login</a>
+                        </div>
+                    @endauth
+                </div>
+            </div>
+        </section>
+
         <!-- Related Products -->
         @if(isset($relatedProducts) && $relatedProducts->count() > 0)
         <section class="related-section">
@@ -310,8 +436,12 @@
             msg.innerHTML = '<span style="color:var(--danger)">Sold Out</span>';
             cartBtn.disabled = true;
             cartBtn.innerText = "Sold Out";
+        } else if(stockQty <= 5) {
+            msg.innerHTML = '<span style="color:#f59e0b"><i class="fas fa-fire"></i> Only ' + stockQty + ' left — order soon!</span>';
+            cartBtn.disabled = false;
+            cartBtn.innerText = "Add to Bag";
         } else {
-            msg.innerHTML = '<span style="color:#1a7d32"><i class="fas fa-check"></i> In stock, ready to ship</span>';
+            msg.innerHTML = '<span style="color:#34d399"><i class="fas fa-check"></i> In stock, ready to ship</span>';
             cartBtn.disabled = false;
             cartBtn.innerText = "Add to Bag";
         }

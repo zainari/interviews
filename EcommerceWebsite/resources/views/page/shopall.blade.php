@@ -9,12 +9,12 @@
 
 <style>
     :root {
-        --primary-neutral: #111111;
-        --secondary-neutral: #555555;
-        --accent-neutral: #8c8276;
-        --warm-bg: #faf9f6;
-        --white-bg: #ffffff;
-        --light-border: #e8e6e1;
+        --primary-neutral: #ffffff;
+        --secondary-neutral: #888888;
+        --accent-neutral: #c9a86c;
+        --warm-bg: #0a0a0a;
+        --white-bg: #111111;
+        --light-border: #1f1f1f;
         --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
@@ -48,6 +48,10 @@
     .filter-list span { font-size: 11px; color: var(--accent-neutral); font-weight: 700; }
     .price-range { width: 100%; margin: 15px 0; accent-color: var(--primary-neutral); }
     .price-labels { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--primary-neutral); }
+    .price-inputs { display: flex; align-items: center; gap: 10px; }
+    .price-inputs input { width: 100%; padding: 10px 12px; border: 1px solid var(--light-border); background: var(--warm-bg); color: var(--primary-neutral); font-size: 13px; outline: none; transition: var(--transition-smooth); }
+    .price-inputs input:focus { border-color: var(--accent-neutral); }
+    .price-inputs span { color: var(--secondary-neutral); font-size: 13px; }
     .apply-btn { width: 100%; padding: 14px; background: var(--primary-neutral); color: var(--white-bg); border: 1px solid var(--primary-neutral); font-weight: 700; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: var(--transition-smooth); }
     .apply-btn:hover { background: transparent; color: var(--primary-neutral); }
 
@@ -61,14 +65,14 @@
     .result-count { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary-neutral); }
     .result-count span { color: var(--primary-neutral); }
     .sort-select { padding: 10px 14px; border: 1px solid var(--light-border); background: var(--warm-bg); font-size: 13px; font-weight: 600; color: var(--primary-neutral); outline: none; cursor: pointer; transition: var(--transition-smooth); }
-    .sort-select:focus { border-color: var(--primary-neutral); }
+    .sort-select:focus { border-color: var(--accent-neutral); }
 
     /* Product Grid */
     .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
     .product-card { background: var(--white-bg); border: 1px solid var(--light-border); overflow: hidden; transition: var(--transition-smooth); position: relative; display: flex; flex-direction: column; }
     .product-card:hover { border-color: var(--primary-neutral); box-shadow: 0 20px 40px rgba(0,0,0,0.04); transform: translateY(-5px); }
 
-    .p-img-box { height: clamp(260px, 30vw, 380px); background: #fbfbfb; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+    .p-img-box { height: clamp(260px, 30vw, 380px); background: #161616; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
     .p-img-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     .product-card:hover .p-img-box img { transform: scale(1.05); }
 
@@ -78,7 +82,7 @@
     .p-btn { width: 40px; height: 40px; background: var(--white-bg); border: 1px solid var(--light-border); border-radius: 50%; display: grid; place-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; color: var(--primary-neutral); text-decoration: none; transition: var(--transition-smooth); }
     .p-btn:hover { background: var(--primary-neutral); color: var(--white-bg); border-color: var(--primary-neutral); }
 
-    .badge-luxury { position: absolute; top: 12px; left: 12px; background: var(--primary-neutral); color: var(--white-bg); padding: 5px 12px; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; z-index: 2; }
+    .badge-luxury { position: absolute; top: 12px; left: 12px; background: #7a1f2a; color: #ffffff; padding: 5px 12px; font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; z-index: 2; }
 
     .p-info { padding: 22px 18px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; }
     .p-brand { color: var(--accent-neutral); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
@@ -91,22 +95,23 @@
     .product-card:hover .add-btn { background: var(--primary-neutral); color: var(--white-bg); }
 
     .empty-state { grid-column: 1/-1; text-align: center; padding: 80px 20px; background: var(--white-bg); border: 1px dashed var(--light-border); }
-    .empty-state i { font-size: 48px; color: var(--light-border); margin-bottom: 20px; }
+    .empty-state i { font-size: 48px; color: var(--secondary-neutral); margin-bottom: 20px; }
     .empty-state p { color: var(--secondary-neutral); font-size: 15px; }
 
     /* Pagination */
     .pagination { margin-top: 60px; display: flex; justify-content: center; gap: 10px; }
-    .pagination a { width: 44px; height: 44px; border: 1px solid var(--light-border); display: grid; place-items: center; font-weight: 700; font-size: 13px; color: var(--primary-neutral); transition: var(--transition-smooth); }
+    .pagination a, .pagination span.disabled { width: 44px; height: 44px; border: 1px solid var(--light-border); display: grid; place-items: center; font-weight: 700; font-size: 13px; color: var(--primary-neutral); transition: var(--transition-smooth); }
     .pagination a:hover, .pagination a.active { background: var(--primary-neutral); color: var(--white-bg); border-color: var(--primary-neutral); }
+    .pagination span.disabled { color: var(--secondary-neutral); opacity: 0.4; cursor: not-allowed; }
 
     /* Newsletter */
-    .newsletter-section { padding: 100px 0; background: #111111; color: var(--white-bg); text-align: center; }
-    .newsletter-section h2 { font-size: 32px; font-weight: 300; margin-bottom: 15px; text-transform: uppercase; letter-spacing: -0.5px; }
+    .newsletter-section { padding: 100px 0; background: #111111; color: #ffffff; text-align: center; border-top: 1px solid var(--light-border); }
+    .newsletter-section h2 { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 500; margin-bottom: 15px; }
     .newsletter-section p { opacity: 0.6; font-size: 15px; margin-bottom: 35px; max-width: 600px; margin-left: auto; margin-right: auto; }
     .newsletter-form { display: flex; max-width: 520px; margin: auto; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
-    .newsletter-form input { flex: 1; background: transparent; border: none; outline: none; color: var(--white-bg); padding: 12px 0; font-size: 15px; }
+    .newsletter-form input { flex: 1; background: transparent; border: none; outline: none; color: #ffffff; padding: 12px 0; font-size: 15px; }
     .newsletter-form input::placeholder { color: rgba(255,255,255,0.4); }
-    .newsletter-form button { background: transparent; color: var(--white-bg); border: none; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 12px; cursor: pointer; }
+    .newsletter-form button { background: transparent; color: #ffffff; border: none; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 12px; cursor: pointer; }
     .newsletter-form button:hover { color: var(--accent-neutral); }
 
     /* Responsive */
@@ -164,35 +169,44 @@
                     <i class="fas fa-times" id="closeFilters" style="font-size: 20px; cursor: pointer;"></i>
                 </div>
 
-                <div class="filter-card" data-aos="fade-up">
-                    <h4 class="filter-title">Categories</h4>
-                    <ul class="filter-list">
-                        <li><label><input type="checkbox"> Men's Fashion</label> <span>24</span></li>
-                        <li><label><input type="checkbox"> Women's Fashion</label> <span>18</span></li>
-                        <li><label><input type="checkbox"> Watches</label> <span>12</span></li>
-                        <li><label><input type="checkbox"> Footwear</label> <span>09</span></li>
-                        <li><label><input type="checkbox"> Bags</label> <span>15</span></li>
-                    </ul>
-                </div>
+                <form method="GET" action="{{ route('shop.all') }}">
+                    @if(request('search'))
+                        <input type="hidden" name="search" value="{{ request('search') }}">
+                    @endif
+                    @if(request('sort'))
+                        <input type="hidden" name="sort" value="{{ request('sort') }}">
+                    @endif
 
-                <div class="filter-card" data-aos="fade-up" data-aos-delay="50">
-                    <h4 class="filter-title">Price Range</h4>
-                    <input type="range" class="price-range" min="0" max="10000" value="10000">
-                    <div class="price-labels">
-                        <span>Rs. 0</span>
-                        <span>Rs. 10,000+</span>
+                    <div class="filter-card" data-aos="fade-up">
+                        <h4 class="filter-title">Categories</h4>
+                        <ul class="filter-list">
+                            @foreach($categories as $cat)
+                            <li><label><input type="checkbox" name="categories[]" value="{{ $cat->id }}" {{ in_array($cat->id, (array) request('categories')) ? 'checked' : '' }}> {{ $cat->name }}</label> <span>{{ $cat->products_count }}</span></li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <button class="apply-btn" style="margin-top: 20px;">Apply Filter</button>
-                </div>
 
-                <div class="filter-card" data-aos="fade-up" data-aos-delay="100">
-                    <h4 class="filter-title">Featured Brands</h4>
-                    <ul class="filter-list">
-                        <li><label><input type="checkbox"> WASA SELECT</label></li>
-                        <li><label><input type="checkbox"> Urban Luxury</label></li>
-                        <li><label><input type="checkbox"> Premium Line</label></li>
-                    </ul>
-                </div>
+                    <div class="filter-card" data-aos="fade-up" data-aos-delay="50">
+                        <h4 class="filter-title">Price Range</h4>
+                        <div class="price-inputs">
+                            <input type="number" name="min_price" placeholder="Min" value="{{ request('min_price') }}" min="0">
+                            <span>—</span>
+                            <input type="number" name="max_price" placeholder="Max" value="{{ request('max_price') }}" min="0">
+                        </div>
+                    </div>
+
+                    <div class="filter-card" data-aos="fade-up" data-aos-delay="100">
+                        <h4 class="filter-title">Brands</h4>
+                        <ul class="filter-list">
+                            @foreach($brands as $brand)
+                            <li><label><input type="checkbox" name="brands[]" value="{{ $brand }}" {{ in_array($brand, (array) request('brands')) ? 'checked' : '' }}> {{ $brand }}</label></li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="apply-btn">Apply Filters</button>
+                    <a href="{{ route('shop.all') }}" style="display:block; text-align:center; margin-top:14px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color: var(--secondary-neutral);">Clear All</a>
+                </form>
             </aside>
 
             <!-- Main Shop Area -->
@@ -200,15 +214,15 @@
                 <!-- Toolbar -->
                 <div class="shop-toolbar" data-aos="fade-down">
                     <div class="result-count">
-                        Showing <span>{{ $product->count() }}</span> Premium Products
+                        Showing <span>{{ $product->firstItem() ?? 0 }}–{{ $product->lastItem() ?? 0 }}</span> of <span>{{ $product->total() }}</span> Products
                     </div>
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary-neutral);">Sort By:</span>
-                        <select class="sort-select">
-                            <option>Latest Arrivals</option>
-                            <option>Price: Low to High</option>
-                            <option>Price: High to Low</option>
-                            <option>Top Rated</option>
+                        <select class="sort-select" id="sortSelect">
+                            <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>Latest Arrivals</option>
+                            <option value="price_low" {{ request('sort') == 'price_low' ? 'selected' : '' }}>Price: Low to High</option>
+                            <option value="price_high" {{ request('sort') == 'price_high' ? 'selected' : '' }}>Price: High to Low</option>
+                            <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Name: A to Z</option>
                         </select>
                     </div>
                 </div>
@@ -224,7 +238,13 @@
                         @endphp
                         <div class="product-card" data-aos="fade-up" data-aos-delay="{{ $loop->index % 6 * 50 }}">
                             <div class="p-img-box">
-                                <span class="badge-luxury">Premium</span>
+                                @if($item->stock <= 0)
+                                    <span class="badge-luxury" style="background:#2a2a2a; color:#888;">Sold Out</span>
+                                @elseif($item->stock <= 5)
+                                    <span class="badge-luxury" style="background:#f59e0b; color:#000;">Only {{ $item->stock }} Left</span>
+                                @else
+                                    <span class="badge-luxury">Premium</span>
+                                @endif
                                 <div class="p-actions">
                                     <div class="p-btn" onclick="toggleWishlist({{ $item->id }}, this)" style="color: {{ $isWishlisted ? 'red' : 'inherit' }};">
                                         <i class="{{ $isWishlisted ? 'fa-solid fas' : 'fa-regular far' }} fa-heart"></i>
@@ -254,12 +274,25 @@
                 </div>
 
                 <!-- Pagination -->
+                @if($product->hasPages())
                 <div class="pagination" data-aos="fade-up">
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#"><i class="fas fa-chevron-right"></i></a>
+                    @if($product->onFirstPage())
+                        <span class="disabled"><i class="fas fa-chevron-left"></i></span>
+                    @else
+                        <a href="{{ $product->previousPageUrl() }}"><i class="fas fa-chevron-left"></i></a>
+                    @endif
+
+                    @foreach($product->getUrlRange(1, $product->lastPage()) as $page => $url)
+                        <a href="{{ $url }}" class="{{ $page == $product->currentPage() ? 'active' : '' }}">{{ $page }}</a>
+                    @endforeach
+
+                    @if($product->hasMorePages())
+                        <a href="{{ $product->nextPageUrl() }}"><i class="fas fa-chevron-right"></i></a>
+                    @else
+                        <span class="disabled"><i class="fas fa-chevron-right"></i></span>
+                    @endif
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -271,10 +304,14 @@
         <div data-aos="zoom-in">
             <h2>Join Wasaaz Club</h2>
             <p>Subscribe for early access to new collections, private sales, and exclusive member-only offers.</p>
-            <form class="newsletter-form" onsubmit="event.preventDefault();">
-                <input type="email" placeholder="Your premium email address" required>
+            <form class="newsletter-form" action="{{ route('newsletter.subscribe') }}" method="POST">
+                @csrf
+                <input type="email" name="email" placeholder="Your premium email address" required>
                 <button type="submit">Subscribe</button>
             </form>
+            @if(session('newsletter_success'))
+                <p style="margin-top:16px; color:#34d399; font-size:13px; font-weight:600;"><i class="fas fa-check-circle"></i> {{ session('newsletter_success') }}</p>
+            @endif
         </div>
     </div>
 </section>
@@ -296,6 +333,17 @@
         closeFilters.addEventListener('click', () => {
             shopSidebar.classList.remove('active');
             document.body.style.overflow = 'auto';
+        });
+    }
+
+    // Sort dropdown — preserves all current filters in the URL
+    const sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            const url = new URL(window.location.href);
+            url.searchParams.set('sort', this.value);
+            url.searchParams.delete('page');
+            window.location.href = url.toString();
         });
     }
 </script>
